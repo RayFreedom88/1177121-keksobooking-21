@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Ильдар Мусин](https://up.htmlacademy.ru/javascript/21/user/1177121).
-* Наставник: `Неизвестно`.
+* Наставник: [Дмитрий Пальчук](https://htmlacademy.ru/profile/bulletok).
 
 ---
 
