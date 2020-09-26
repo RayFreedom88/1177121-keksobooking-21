@@ -65,10 +65,10 @@ let getRandomElement = function (items) {
 
 let getBookingsMock = function () {
   let mocks = [];
-  for (let i = 1; i <= USERS_COUNT; i++) {
+  for (let i = 0; i < USERS_COUNT; i++) {
     mocks.push({
       author: {
-        avatar: getRandomElement(AVATARS),
+        avatar: AVATARS[i],
       },
       offer: {
         title: getRandomElement(TITLE),
@@ -81,7 +81,7 @@ let getBookingsMock = function () {
         checkout: getRandomElement(TIMES),
         features: getRandomElement(FEATURES),
         description: getRandomElement(DESCRIPTIONS),
-        photos: getRandomElement(PHOTOS),
+        photos: getRandomElement(PHOTOS) // может быть сюда стоит добавить циклы, чтобы было несколько фотографий? => см. ниже комментарий.
       },
 
       location: {
@@ -121,4 +121,51 @@ let createPins = function (objects) {
   mapPinsElement.appendChild(fragment);
 };
 
-createPins(getBookingsMock());
+let getCard = function (object) {
+  let cardTemplate = document.querySelector(`#card`).content;
+  let cardElement = cardTemplate.querySelector(`.map__card`).cloneNode(true);
+
+  cardElement.querySelector(`.popup__avatar`).src = object.author.avatar;
+  cardElement.querySelector(`.popup__avatar`).alt = object.offer.description;
+
+  cardElement.querySelector(`.popup__title`).textContent = object.offer.title;
+
+  cardElement.querySelector(`.popup__text--address`).textContent = object.offer.address;
+
+  cardElement.querySelector(`.popup__text--price`).textContent = object.offer.price + `₽/ночь`;
+
+  cardElement.querySelector(`.popup__type`).textContent = object.offer.type;
+
+  cardElement.querySelector(`.popup__text--capacity`).textContent = `${object.offer.rooms} ${object.offer.rooms === 1 ? `комната` : `комнаты`} для ${object.offer.gusts} ${object.offer.gusts === 1 ? `гостя` : `гостей`}`;
+
+  cardElement.querySelector(`.popup__text--time`).textContent = `Заезд после ${object.offer.checkin}, выезд до ${object.offer.checkout}`;
+
+  let featureItems = cardElement.querySelectorAll(`.popup__feature`);
+
+  for (let feature of featureItems) {
+    if (object.offer.features.indexOf(feature.classList[1].replace(`popup__feature--`, ``)) < 0) {
+      feature.remove();
+    }
+  }
+
+  cardElement.querySelector(`.popup__description`).textContent = object.offer.description;
+  // и здесь надо будет сделать цикл с добавлением фотографий из объекта?
+  cardElement.querySelector(`.popup__photo`).src = object.offer.photos;
+
+  return cardElement;
+};
+
+let createCards = function (objects) {
+  let fragment = document.createDocumentFragment();
+
+  objects.forEach(function (object) {
+    fragment.appendChild(getCard(object));
+  });
+  mapPinsElement.appendChild(fragment);
+};
+
+let BookingsMock = getBookingsMock();
+
+createPins(BookingsMock);
+createCards(BookingsMock);
+
