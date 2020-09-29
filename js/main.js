@@ -63,6 +63,25 @@ let getRandomElement = function (items) {
   return items[Math.round(Math.random() * (items.length - 1))];
 };
 
+let getRandomArray = function (item) {
+  let array = [];
+  let randomNumber;
+
+  if (Array.isArray(item)) {
+    randomNumber = Math.floor(Math.random() * 7);
+    for (let i = 0; i < randomNumber; i++) {
+      array.push(item[i]);
+    }
+  } else {
+    randomNumber = Math.floor(Math.random() * 4);
+    for (let i = 0; i < randomNumber; i++) {
+      array.push(item);
+    }
+  }
+
+  return array;
+};
+
 let getBookingsMock = function () {
   let mocks = [];
   for (let i = 0; i < USERS_COUNT; i++) {
@@ -79,9 +98,9 @@ let getBookingsMock = function () {
         gusts: getRandomValue(1, 10),
         checkin: getRandomElement(TIMES),
         checkout: getRandomElement(TIMES),
-        features: getRandomElement(FEATURES),
+        features: getRandomArray(FEATURES),
         description: getRandomElement(DESCRIPTIONS),
-        photos: getRandomElement(PHOTOS) // может быть сюда стоит добавить циклы, чтобы было несколько фотографий? => см. ниже комментарий.
+        photos: getRandomArray(getRandomElement(PHOTOS))
       },
 
       location: {
@@ -94,15 +113,15 @@ let getBookingsMock = function () {
   return mocks;
 };
 
-let getPin = function (object) {
+let getPin = function (booking) {
   let pinTemplate = document.querySelector(`#pin`).content;
   let pinElement = pinTemplate.querySelector(`.map__pin`).cloneNode(true);
 
-  pinElement.querySelector(`img`).src = object.author.avatar;
-  pinElement.querySelector(`img`).alt = object.offer.description;
+  pinElement.querySelector(`img`).src = booking.author.avatar;
+  pinElement.querySelector(`img`).alt = booking.offer.description;
 
-  let locationX = object.location.x - MIN_WIDTH_PINS + `px`;
-  let locationY = object.location.y - MIN_HEIGHT_PINS + `px`;
+  let locationX = booking.location.x - MIN_WIDTH_PINS + `px`;
+  let locationY = booking.location.y - MIN_HEIGHT_PINS + `px`;
 
   pinElement.style.left = locationX;
   pinElement.style.top = locationY;
@@ -112,60 +131,76 @@ let getPin = function (object) {
   return pinElement;
 };
 
-let createPins = function (objects) {
+let createPins = function (bookings) {
   let fragment = document.createDocumentFragment();
 
-  objects.forEach(function (object) {
-    fragment.appendChild(getPin(object));
+  bookings.forEach(function (booking) {
+    fragment.appendChild(getPin(booking));
   });
   mapPinsElement.appendChild(fragment);
 };
 
-let getCard = function (object) {
+let getCard = function (booking) {
   let cardTemplate = document.querySelector(`#card`).content;
   let cardElement = cardTemplate.querySelector(`.map__card`).cloneNode(true);
 
-  cardElement.querySelector(`.popup__avatar`).src = object.author.avatar;
-  cardElement.querySelector(`.popup__avatar`).alt = object.offer.description;
+  cardElement.querySelector(`.popup__avatar`).src = booking.author.avatar;
+  cardElement.querySelector(`.popup__avatar`).alt = booking.offer.description;
 
-  cardElement.querySelector(`.popup__title`).textContent = object.offer.title;
+  cardElement.querySelector(`.popup__title`).textContent = booking.offer.title;
 
-  cardElement.querySelector(`.popup__text--address`).textContent = object.offer.address;
+  cardElement.querySelector(`.popup__text--address`).textContent = booking.offer.address;
 
-  cardElement.querySelector(`.popup__text--price`).textContent = object.offer.price + `₽/ночь`;
+  cardElement.querySelector(`.popup__text--price`).textContent = booking.offer.price + `₽/ночь`;
 
-  cardElement.querySelector(`.popup__type`).textContent = object.offer.type;
+  cardElement.querySelector(`.popup__type`).textContent = booking.offer.type;
 
-  cardElement.querySelector(`.popup__text--capacity`).textContent = `${object.offer.rooms} ${object.offer.rooms === 1 ? `комната` : `комнаты`} для ${object.offer.gusts} ${object.offer.gusts === 1 ? `гостя` : `гостей`}`;
+  cardElement.querySelector(`.popup__text--capacity`).textContent = `${booking.offer.rooms} ${booking.offer.rooms === 1 ? `комната` : `комнаты`} для ${booking.offer.gusts} ${booking.offer.gusts === 1 ? `гостя` : `гостей`}`;
 
-  cardElement.querySelector(`.popup__text--time`).textContent = `Заезд после ${object.offer.checkin}, выезд до ${object.offer.checkout}`;
+  cardElement.querySelector(`.popup__text--time`).textContent = `Заезд после ${booking.offer.checkin}, выезд до ${booking.offer.checkout}`;
 
   let featureItems = cardElement.querySelectorAll(`.popup__feature`);
 
-  for (let feature of featureItems) {
-    if (object.offer.features.indexOf(feature.classList[1].replace(`popup__feature--`, ``)) < 0) {
-      feature.remove();
+  for (let i = 0; i < featureItems.length; i++) {
+    if (featureItems[i].indexOf === booking.offer.features[i]) {
+      featureItems[i].style.opacity = 0.3;
     }
   }
 
-  cardElement.querySelector(`.popup__description`).textContent = object.offer.description;
-  // и здесь надо будет сделать цикл с добавлением фотографий из объекта?
-  cardElement.querySelector(`.popup__photo`).src = object.offer.photos;
+  cardElement.querySelector(`.popup__description`).textContent = booking.offer.description;
+
+  let cardPhotos = cardElement.querySelector(`.popup__photos`);
+  let cardPhotoImage = cardPhotos.querySelector(`.popup__photo`);
+
+  if (booking.offer.photos.length > 0) {
+    cardPhotoImage.remove();
+    for (let photo of booking.offer.photos) {
+      let clonePhoto = document.querySelector(`#card`).content.querySelector(`.popup__photo`).cloneNode(true);
+      clonePhoto.src = photo;
+      cardPhotos.appendChild(clonePhoto);
+    }
+  } else {
+    cardPhotos.remove();
+  }
 
   return cardElement;
 };
 
-let createCards = function (objects) {
+let createCards = function (bookings) {
   let fragment = document.createDocumentFragment();
 
-  objects.forEach(function (object) {
-    fragment.appendChild(getCard(object));
+  bookings.forEach(function (booking) {
+    fragment.appendChild(getCard(booking));
   });
   mapPinsElement.appendChild(fragment);
 };
 
-let BookingsMock = getBookingsMock();
+let render = function () {
+  let bookingsMock = getBookingsMock();
 
-createPins(BookingsMock);
-createCards(BookingsMock);
+  createPins(bookingsMock);
+  createCards(bookingsMock);
+};
+
+render();
 
