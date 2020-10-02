@@ -45,15 +45,24 @@ const MIN_LOCATION_Y = 130;
 const MAX_LOCATION_Y = 630;
 const MIN_WIDTH_PINS = 50;
 const MIN_HEIGHT_PINS = 70;
-
+let COORDS_X = 600;
+let COORDS_Y = 350;
+let numberGuest = {
+  1: [1],
+  2: [1, 2],
+  3: [1, 2, 3],
+  100: [0]
+};
 
 let mapElement = document.querySelector(`.map`);
+let mapPinMainElement = document.querySelector(`.map__pin--main`);
 let mapPinsElement = mapElement.querySelector(`.map__pins`);
-
-let getActivePage = function () {
-  mapElement.classList.remove(`map--faded`);
-};
-getActivePage();
+let mapFiltersElements = document.querySelectorAll(`.map__filter`);
+let adFormElement = document.querySelector(`.ad-form`);
+let adFormFieldsetElements = document.querySelectorAll(`fieldset`);
+let pinAddressInputElement = document.querySelector(`input[name="address"]`);
+let roomNumberElement = adFormElement.querySelector(`#room_number`);
+let numberSeatsElement = adFormElement.querySelector(`#capacity`);
 
 let getRandomValue = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -195,6 +204,47 @@ let createCards = function (bookings) {
   mapPinsElement.appendChild(fragment);
 };
 
+let disableNumberSeatsOptions = function (list) {
+  let capacityOptions = numberSeatsElement.querySelectorAll(`option`);
+
+  for (let i = 0; i < capacityOptions.length; i++) {
+    capacityOptions[i].disabled = true;
+  }
+
+  numberGuest[list].forEach(function (item) {
+    numberSeatsElement.querySelector(`[value="${item}"]`).disabled = false;
+    numberSeatsElement.value = item;
+  });
+};
+
+let onRoomNumberSelectChange = function () {
+  disableNumberSeatsOptions(roomNumberElement.value);
+};
+roomNumberElement.addEventListener(`change`, onRoomNumberSelectChange);
+
+// блокировка форм
+
+let setFormDisabled = function (items) {
+  for (let i = 0; i < items.length; i++) {
+    items[i].disabled = true;
+  }
+};
+
+setFormDisabled(adFormFieldsetElements);
+setFormDisabled(mapFiltersElements);
+
+// активация страницы + вызов отрисовки пинов и карточек
+
+let setFormActive = function (items) {
+  for (let i = 0; i < items.length; i++) {
+    items[i].disabled = false;
+  }
+};
+
+let setAddressCoords = function (coordsX, coordsY) {
+  pinAddressInputElement.value = coordsX + `,` + coordsY;
+};
+
 let render = function () {
   let bookingsMock = getBookingsMock();
 
@@ -202,5 +252,20 @@ let render = function () {
   createCards(bookingsMock);
 };
 
-render();
+let activePage = function () {
+  setFormActive(adFormFieldsetElements);
+  setFormActive(mapFiltersElements);
+  mapElement.classList.remove(`map--faded`);
+  adFormElement.classList.remove(`ad-form--disabled`);
+  setAddressCoords(COORDS_X, COORDS_Y);
+  render();
+};
 
+let getActivePage = function (evt) {
+  if (evt.key === `Enter` || evt.button === 0) {
+    activePage();
+  }
+};
+
+mapPinMainElement.addEventListener(`mousedown`, getActivePage);
+mapPinMainElement.addEventListener(`keydown`, getActivePage);
