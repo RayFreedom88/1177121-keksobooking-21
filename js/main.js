@@ -45,24 +45,14 @@ const MIN_LOCATION_Y = 130;
 const MAX_LOCATION_Y = 630;
 const MIN_WIDTH_PINS = 50;
 const MIN_HEIGHT_PINS = 70;
-let COORDS_X = 600;
-let COORDS_Y = 350;
-let numberGuest = {
-  1: [1],
-  2: [1, 2],
-  3: [1, 2, 3],
-  100: [0]
-};
 
 let mapElement = document.querySelector(`.map`);
 let mapPinMainElement = document.querySelector(`.map__pin--main`);
 let mapPinsElement = mapElement.querySelector(`.map__pins`);
+let mapFiltersContainer = mapElement.querySelector(`.map__filters-container`);
 let mapFiltersElements = document.querySelectorAll(`.map__filter`);
 let adFormElement = document.querySelector(`.ad-form`);
 let adFormFieldsetElements = document.querySelectorAll(`fieldset`);
-let pinAddressInputElement = document.querySelector(`input[name="address"]`);
-let roomNumberElement = adFormElement.querySelector(`#room_number`);
-let numberSeatsElement = adFormElement.querySelector(`#capacity`);
 
 let getRandomValue = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -122,6 +112,29 @@ let getBookingsMock = function () {
   return mocks;
 };
 
+/* util */
+
+let ESC_KEYCODE = 27;
+
+let isEscEvent = function (evt, fn) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    evt.preventDefault();
+    fn();
+  }
+};
+
+let onEscKeyDown = function (evt) {
+  let popup = mapElement.querySelector(`.popup`);
+
+  isEscEvent(evt, function () {
+    if (popup !== null) {
+      removePopup();
+    }
+  });
+};
+
+/* функция создания пина */
+
 let getPin = function (booking) {
   let pinTemplate = document.querySelector(`#pin`).content;
   let pinElement = pinTemplate.querySelector(`.map__pin`).cloneNode(true);
@@ -137,6 +150,12 @@ let getPin = function (booking) {
 
   mapPinsElement.appendChild(pinElement);
 
+  pinElement.addEventListener(`click`, function () {
+    removePopup();
+
+    mapElement.insertBefore(getCard(booking), mapFiltersContainer);
+  });
+
   return pinElement;
 };
 
@@ -148,6 +167,8 @@ let createPins = function (bookings) {
   });
   mapPinsElement.appendChild(fragment);
 };
+
+/* функция создание карточки описания */
 
 let getCard = function (booking) {
   let cardTemplate = document.querySelector(`#card`).content;
@@ -192,17 +213,134 @@ let getCard = function (booking) {
     cardPhotos.remove();
   }
 
+  let popupClose = cardElement.querySelector(`.popup__close`);
+
+  document.addEventListener(`keydown`, onEscKeyDown);
+
+  popupClose.addEventListener(`click`, function () {
+    removePopup();
+
+    document.removeEventListener(`keydown`, onEscKeyDown);
+  });
+
   return cardElement;
 };
 
-let createCards = function (bookings) {
-  let fragment = document.createDocumentFragment();
+let removePopup = function () {
+  let popup = mapElement.querySelector(`.popup`);
 
-  bookings.forEach(function (booking) {
-    fragment.appendChild(getCard(booking));
-  });
-  mapPinsElement.appendChild(fragment);
+  if (popup !== null) {
+    popup.remove();
+  }
 };
+
+/* блокировка форм */
+
+let setFormDisabled = function (items) {
+  for (let i = 0; i < items.length; i++) {
+    items[i].disabled = true;
+  }
+};
+
+setFormDisabled(adFormFieldsetElements);
+setFormDisabled(mapFiltersElements);
+
+/* активация страницы + вызов отрисовки пинов и карточек */
+
+let setFormActive = function (items) {
+  for (let i = 0; i < items.length; i++) {
+    items[i].disabled = false;
+  }
+};
+
+let render = function () {
+  let bookingsMock = getBookingsMock();
+
+  createPins(bookingsMock);
+};
+
+let activePage = function () {
+  setFormActive(adFormFieldsetElements);
+  setFormActive(mapFiltersElements);
+  mapElement.classList.remove(`map--faded`);
+  adFormElement.classList.remove(`ad-form--disabled`);
+  setAddressCoords(COORDS_X, COORDS_Y);
+  render();
+};
+
+// функция активации страницы
+
+let getActivePage = function (evt) {
+  if (evt.key === `Enter` || evt.button === 0) {
+    activePage();
+  }
+
+  mapPinMainElement.removeEventListener(`mousedown`, getActivePage);
+  mapPinMainElement.removeEventListener(`keydown`, getActivePage);
+};
+
+mapPinMainElement.addEventListener(`mousedown`, getActivePage);
+mapPinMainElement.addEventListener(`keydown`, getActivePage);
+
+/* валидация форм */
+
+const COORDS_X = 600;
+const COORDS_Y = 350;
+let pinAddressInputElement = document.querySelector(`#address`);
+
+let selectTypeElement = adFormElement.querySelector(`#type`);
+let inputPriceElement = adFormElement.querySelector(`#price`);
+
+let roomNumberElement = adFormElement.querySelector(`#room_number`);
+let numberSeatsElement = adFormElement.querySelector(`#capacity`);
+
+let selectTimeInElement = adFormElement.querySelector(`#timein`);
+let selectTimeOutElement = adFormElement.querySelector(`#timeout`);
+
+let types = {
+  palace: {
+    ru: `Дворец`,
+    min: `10000`
+  },
+  flat: {
+    ru: `Квартира`,
+    min: `1000`
+  },
+  house: {
+    ru: `Дом`,
+    min: `5000`
+  },
+  bungalow: {
+    ru: `Бунгало`,
+    min: `0`
+  }
+};
+
+let numberGuest = {
+  1: [1],
+  2: [1, 2],
+  3: [1, 2, 3],
+  100: [0]
+};
+
+// валидация адреса
+
+pinAddressInputElement.readOnly = true;
+
+let setAddressCoords = function (coordsX, coordsY) {
+  pinAddressInputElement.value = coordsX + `,` + coordsY;
+};
+
+// валидация типа жилья и цены за ночь
+
+let onTypeSelectChange = function () {
+  inputPriceElement.min = types[selectTypeElement.value].min;
+  inputPriceElement.placeholder = types[selectTypeElement.value].min;
+};
+
+selectTypeElement.addEventListener(`change`, onTypeSelectChange);
+
+// валидация количество комнат и количеста мест
 
 let disableNumberSeatsOptions = function (list) {
   let capacityOptions = numberSeatsElement.querySelectorAll(`option`);
@@ -220,52 +358,18 @@ let disableNumberSeatsOptions = function (list) {
 let onRoomNumberSelectChange = function () {
   disableNumberSeatsOptions(roomNumberElement.value);
 };
+
 roomNumberElement.addEventListener(`change`, onRoomNumberSelectChange);
 
-// блокировка форм
+// валидация времени заезда и выезда
 
-let setFormDisabled = function (items) {
-  for (let i = 0; i < items.length; i++) {
-    items[i].disabled = true;
-  }
+let onTimeInSelectChange = function () {
+  selectTimeOutElement.value = selectTimeInElement.value;
 };
 
-setFormDisabled(adFormFieldsetElements);
-setFormDisabled(mapFiltersElements);
-
-// активация страницы + вызов отрисовки пинов и карточек
-
-let setFormActive = function (items) {
-  for (let i = 0; i < items.length; i++) {
-    items[i].disabled = false;
-  }
+let onTimeOutSelectChange = function () {
+  selectTimeInElement.value = selectTimeOutElement.value;
 };
 
-let setAddressCoords = function (coordsX, coordsY) {
-  pinAddressInputElement.value = coordsX + `,` + coordsY;
-};
-
-let render = function () {
-  let bookingsMock = getBookingsMock();
-
-  createPins(bookingsMock);
-  createCards(bookingsMock);
-};
-
-let activePage = function () {
-  setFormActive(adFormFieldsetElements);
-  setFormActive(mapFiltersElements);
-  mapElement.classList.remove(`map--faded`);
-  adFormElement.classList.remove(`ad-form--disabled`);
-  setAddressCoords(COORDS_X, COORDS_Y);
-  render();
-};
-
-let getActivePage = function (evt) {
-  if (evt.key === `Enter` || evt.button === 0) {
-    activePage();
-  }
-};
-
-mapPinMainElement.addEventListener(`mousedown`, getActivePage);
-mapPinMainElement.addEventListener(`keydown`, getActivePage);
+selectTimeInElement.addEventListener(`change`, onTimeInSelectChange);
+selectTimeOutElement.addEventListener(`change`, onTimeOutSelectChange);
