@@ -23,7 +23,7 @@
   let adFormElement = document.querySelector(`.ad-form`);
   let adFormFieldsetElements = document.querySelectorAll(`fieldset`);
 
-  /* функция создания пина */
+  /* функция отрисовки пинов */
 
   let createPins = function (bookings) {
     let fragment = document.createDocumentFragment();
@@ -35,8 +35,6 @@
 
     mapPinsElement.appendChild(fragment);
   };
-
-  /* функция создание карточки описания */
 
   /* блокировка форм */
 
@@ -63,7 +61,7 @@
 
   let render = function () {
     let bookingsMock = window.mock.getBookingsMock();
-    console.log(bookingsMock);
+
     createPins(bookingsMock);
   };
 
@@ -76,7 +74,7 @@
     render();
   };
 
-  // функция активации страницы
+  // активации страницы
 
   let getActivePage = function (evt) {
     if (evt.key === `Enter` || evt.button === 0) {
@@ -89,8 +87,6 @@
 
   mapPinMainElement.addEventListener(`mousedown`, getActivePage);
   mapPinMainElement.addEventListener(`keydown`, getActivePage);
-
-  /* валидация форм */
 
   window.main = {
     USERS_COUNT: USERS_COUNT,
