@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  let map = window.map.mapElement;
+  let map = window.main.mapElement;
   let MIN_WIDTH_PINS = window.main.MIN_WIDTH_PINS;
   let MIN_HEIGHT_PINS = window.main.MIN_HEIGHT_PINS;
 

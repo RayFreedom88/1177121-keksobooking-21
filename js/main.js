@@ -3,8 +3,8 @@
 (function () {
   const USERS_COUNT = 8;
 
-  const MAX_LOCATION_X = document.querySelector(`.map`).offsetWidth;
   const MIN_LOCATION_X = 0;
+  const MAX_LOCATION_X = document.querySelector(`.map`).offsetWidth;
 
   const MIN_LOCATION_Y = 130;
   const MAX_LOCATION_Y = 630;
@@ -15,7 +15,7 @@
   const COORDS_X = 600;
   const COORDS_Y = 350;
 
-  let map = window.map.mapElement;
+  let mapElement = document.querySelector(`.map`);
 
   let mapPinMainElement = document.querySelector(`.map__pin--main`);
   let mapFiltersElements = document.querySelectorAll(`.map__filter`);
@@ -68,7 +68,7 @@
   let activePage = function () {
     setFormActive(adFormFieldsetElements);
     setFormActive(mapFiltersElements);
-    map.classList.remove(`map--faded`);
+    mapElement.classList.remove(`map--faded`);
     adFormElement.classList.remove(`ad-form--disabled`);
     setAddressCoords(COORDS_X, COORDS_Y);
     render();
@@ -96,6 +96,8 @@
     MAX_LOCATION_Y: MAX_LOCATION_Y,
     MIN_WIDTH_PINS: MIN_WIDTH_PINS,
     MIN_HEIGHT_PINS: MIN_HEIGHT_PINS,
+    mapElement: mapElement,
+    mapPinMainElement: mapPinMainElement,
     adFormElement: adFormElement,
     setAddressCoords: setAddressCoords
   };
