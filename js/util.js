@@ -2,6 +2,7 @@
 
 (function () {
   let ESC_KEYCODE = 27;
+  let map = window.main.mapElement;
   let removePopup = window.card.removePopup;
 
   let isEscEvent = function (evt, fn) {
@@ -12,7 +13,7 @@
   };
 
   let onEscKeyDown = function (evt) {
-    let popup = window.map.querySelector(`.popup`);
+    let popup = map.querySelector(`.popup`);
 
     isEscEvent(evt, function () {
       if (popup !== null) {
