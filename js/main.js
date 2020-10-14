@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-  const USERS_COUNT = 8;
   const MAX_COUNT = 5;
 
   const MIN_LOCATION_X = 0;
@@ -13,8 +12,8 @@
   const MIN_WIDTH_PINS = 50;
   const MIN_HEIGHT_PINS = 70;
 
-  const COORDS_X = 600;
-  const COORDS_Y = 350;
+  const COORDS_X = 570;
+  const COORDS_Y = 375;
 
   let mapElement = document.querySelector(`.map`);
 
@@ -22,11 +21,13 @@
   let mapFiltersElements = document.querySelectorAll(`.map__filter`);
 
   let adFormElement = document.querySelector(`.ad-form`);
-  let adFormFieldsetElements = document.querySelectorAll(`fieldset`);
+  let adFormFieldsetElements = adFormElement.querySelectorAll(`fieldset`);
+  let pinAddressInputElement = adFormElement.querySelector(`#address`);
 
   const getMapElement = () => mapElement;
   const getMapPinMainElement = () => mapPinMainElement;
   const getAdFormElement = () => adFormElement;
+  const getPinAddressInputElement = () => pinAddressInputElement;
 
   let offers = [];
 
@@ -63,8 +64,10 @@
   };
 
   let setAddressCoords = function (coordsX, coordsY) {
-    window.form.getPinAddressInputElement.value = coordsX + `,` + coordsY;
+    pinAddressInputElement.value = coordsX + `,` + coordsY;
   };
+
+  setAddressCoords(COORDS_X, COORDS_Y);
 
   let onSuccess = function (data) {
     offers = data.slice().filter(function (item) {
@@ -83,7 +86,6 @@
     setFormActive(mapFiltersElements);
     mapElement.classList.remove(`map--faded`);
     adFormElement.classList.remove(`ad-form--disabled`);
-    setAddressCoords(COORDS_X, COORDS_Y);
     window.backend.load(onSuccess, onError);
   };
 
@@ -101,8 +103,33 @@
   mapPinMainElement.addEventListener(`mousedown`, getActivePage);
   mapPinMainElement.addEventListener(`keydown`, getActivePage);
 
+  // деактивация страницы
+
+  let setMainPinStartCoords = function () {
+    mapPinMainElement.style.left = COORDS_X + `px`;
+    mapPinMainElement.style.top = COORDS_Y + `px`;
+  };
+
+  let getDeactivePage = function () {
+    mapElement.classList.add(`map--faded`);
+
+    adFormElement.reset();
+    adFormElement.classList.add(`ad-form--disabled`);
+
+    setFormDisabled(adFormFieldsetElements);
+    setFormDisabled(mapFiltersElements);
+
+    setAddressCoords(COORDS_X, COORDS_Y);
+    setMainPinStartCoords();
+
+    window.card.removePopup();
+    window.pin.removePins();
+
+    mapPinMainElement.addEventListener(`mousedown`, getActivePage);
+    mapPinMainElement.addEventListener(`keydown`, getActivePage);
+  };
+
   window.main = {
-    USERS_COUNT: USERS_COUNT,
     MAX_LOCATION_X: MAX_LOCATION_X,
     MIN_LOCATION_X: MIN_LOCATION_X,
     MIN_LOCATION_Y: MIN_LOCATION_Y,
@@ -112,7 +139,7 @@
     getMapElement: getMapElement(),
     getMapPinMainElement: getMapPinMainElement(),
     getAdFormElement: getAdFormElement(),
-    setAddressCoords: setAddressCoords
+    getPinAddressInputElement: getPinAddressInputElement(),
+    getDeactivePage: getDeactivePage
   };
 })();
-

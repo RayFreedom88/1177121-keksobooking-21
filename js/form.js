@@ -2,7 +2,6 @@
 
 (function () {
   let adFormElement = window.main.getAdFormElement;
-  let pinAddressInputElement = document.querySelector(`#address`);
 
   let selectTypeElement = adFormElement.querySelector(`#type`);
   let inputPriceElement = adFormElement.querySelector(`#price`);
@@ -12,6 +11,8 @@
 
   let selectTimeInElement = adFormElement.querySelector(`#timein`);
   let selectTimeOutElement = adFormElement.querySelector(`#timeout`);
+
+  let adFormResetElement = adFormElement.querySelector(`.ad-form__reset`);
 
   let types = {
     palace: {
@@ -39,11 +40,9 @@
     100: [0]
   };
 
-  const getPinAddressInputElement = () => pinAddressInputElement;
-
   // отключение ручного редактирования поля адреса формы
 
-  pinAddressInputElement.readOnly = true;
+  window.main.getPinAddressInputElement.readOnly = true;
 
   // валидация типа жилья и цены за ночь
 
@@ -88,7 +87,26 @@
   selectTimeInElement.addEventListener(`change`, onTimeInSelectChange);
   selectTimeOutElement.addEventListener(`change`, onTimeOutSelectChange);
 
-  window.form = {
-    getPinAddressInputElement: getPinAddressInputElement(),
+  // отправка формы
+
+  let onError = function () {
+    window.message.onErrorSend(`Ошибка загрузки объявления`);
   };
+
+  let onSuccess = function () {
+    window.message.onSuccessSend();
+    window.main.getDeactivePage();
+  };
+
+  let onFormSubmit = function (evt) {
+    evt.preventDefault();
+    window.backend.save(onSuccess, onError, new FormData(adFormElement));
+  };
+
+  adFormElement.addEventListener(`submit`, onFormSubmit);
+
+  adFormResetElement.addEventListener(`click`, function (evt) {
+    evt.preventDefault();
+    window.main.getDeactivePage();
+  });
 })();

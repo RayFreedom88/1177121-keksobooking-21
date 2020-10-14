@@ -34,8 +34,19 @@
     return pinElement;
   };
 
+  let removePins = function () {
+    let pinsOnMap = map.querySelectorAll(`.map__pin:not(.map__pin--main)`);
+
+    if (pinsOnMap.length > 0) {
+      pinsOnMap.forEach(function (pin) {
+        pin.remove();
+      });
+    }
+  };
+
   window.pin = {
     getMapPinsElement: getMapPinsElement(),
-    getPin: getPin
+    getPin: getPin,
+    removePins: removePins
   };
 })();

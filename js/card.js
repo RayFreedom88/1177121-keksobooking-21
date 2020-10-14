@@ -19,7 +19,7 @@
 
     cardElement.querySelector(`.popup__type`).textContent = booking.offer.type;
 
-    cardElement.querySelector(`.popup__text--capacity`).textContent = `${booking.offer.rooms} ${booking.offer.rooms === 1 ? `комната` : `комнаты`} для ${booking.offer.gusts} ${booking.offer.gusts === 1 ? `гостя` : `гостей`}`;
+    cardElement.querySelector(`.popup__text--capacity`).textContent = `${booking.offer.rooms} ${booking.offer.rooms === 1 ? `комната` : `комнаты`} для ${booking.offer.guests} ${booking.offer.guests === 1 ? `гостя` : `гостей`}`;
 
     cardElement.querySelector(`.popup__text--time`).textContent = `Заезд после ${booking.offer.checkin}, выезд до ${booking.offer.checkout}`;
 
