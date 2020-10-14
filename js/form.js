@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  let adFormElement = window.main.adFormElement;
+  let adFormElement = window.main.getAdFormElement;
   let pinAddressInputElement = document.querySelector(`#address`);
 
   let selectTypeElement = adFormElement.querySelector(`#type`);
@@ -38,6 +38,8 @@
     3: [1, 2, 3],
     100: [0]
   };
+
+  const getPinAddressInputElement = () => pinAddressInputElement;
 
   // отключение ручного редактирования поля адреса формы
 
@@ -87,6 +89,6 @@
   selectTimeOutElement.addEventListener(`change`, onTimeOutSelectChange);
 
   window.form = {
-    pinAddressInputElement: pinAddressInputElement,
+    getPinAddressInputElement: getPinAddressInputElement(),
   };
 })();

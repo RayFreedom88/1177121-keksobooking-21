@@ -1,12 +1,14 @@
 'use strict';
 
 (function () {
-  let map = window.main.mapElement;
+  let map = window.main.getMapElement;
   let MIN_WIDTH_PINS = window.main.MIN_WIDTH_PINS;
   let MIN_HEIGHT_PINS = window.main.MIN_HEIGHT_PINS;
 
   let mapPinsElement = map.querySelector(`.map__pins`);
   let mapFiltersContainer = map.querySelector(`.map__filters-container`);
+
+  const getMapPinsElement = () => mapPinsElement;
 
   let getPin = function (booking) {
     let pinTemplate = document.querySelector(`#pin`).content;
@@ -33,7 +35,7 @@
   };
 
   window.pin = {
-    PinsElement: mapPinsElement,
+    getMapPinsElement: getMapPinsElement(),
     getPin: getPin
   };
 })();
