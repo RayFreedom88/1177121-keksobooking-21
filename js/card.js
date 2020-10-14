@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  let map = window.main.mapElement;
+  let map = window.main.getMapElement;
   let onEscKeyDown = window.card.onEscKeyDown;
 
   let getCard = function (booking) {

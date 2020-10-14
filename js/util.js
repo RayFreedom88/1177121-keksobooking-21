@@ -2,13 +2,13 @@
 
 (function () {
   let ESC_KEYCODE = 27;
-  let map = window.main.mapElement;
+  let map = window.main.getMapElement;
   let removePopup = window.card.removePopup;
 
-  let isEscEvent = function (evt, fn) {
+  let isEscEvent = function (evt, actionFn) {
     if (evt.keyCode === ESC_KEYCODE) {
       evt.preventDefault();
-      fn();
+      actionFn();
     }
   };
 

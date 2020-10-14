@@ -2,6 +2,7 @@
 
 (function () {
   const USERS_COUNT = 8;
+  const MAX_COUNT = 5;
 
   const MIN_LOCATION_X = 0;
   const MAX_LOCATION_X = document.querySelector(`.map`).offsetWidth;
@@ -23,11 +24,17 @@
   let adFormElement = document.querySelector(`.ad-form`);
   let adFormFieldsetElements = document.querySelectorAll(`fieldset`);
 
+  const getMapElement = () => mapElement;
+  const getMapPinMainElement = () => mapPinMainElement;
+  const getAdFormElement = () => adFormElement;
+
+  let offers = [];
+
   /* функция отрисовки пинов */
 
   let createPins = function (bookings) {
     let fragment = document.createDocumentFragment();
-    let mapPinsElement = window.pin.PinsElement;
+    let mapPinsElement = window.pin.getMapPinsElement;
 
     bookings.forEach(function (booking) {
       fragment.appendChild(window.pin.getPin(booking));
@@ -56,13 +63,19 @@
   };
 
   let setAddressCoords = function (coordsX, coordsY) {
-    window.form.pinAddressInputElement.value = coordsX + `,` + coordsY;
+    window.form.getPinAddressInputElement.value = coordsX + `,` + coordsY;
   };
 
-  let render = function () {
-    let bookingsMock = window.mock.getBookingsMock();
+  let onSuccess = function (data) {
+    offers = data.slice().filter(function (item) {
+      return Object.keys(item.offer).length !== 0;
+    });
 
-    createPins(bookingsMock);
+    createPins(offers.slice(0, MAX_COUNT));
+  };
+
+  let onError = function (message) {
+    window.message.onErrorSend(message);
   };
 
   let activePage = function () {
@@ -71,7 +84,7 @@
     mapElement.classList.remove(`map--faded`);
     adFormElement.classList.remove(`ad-form--disabled`);
     setAddressCoords(COORDS_X, COORDS_Y);
-    render();
+    window.backend.load(onSuccess, onError);
   };
 
   // активации страницы
@@ -96,9 +109,10 @@
     MAX_LOCATION_Y: MAX_LOCATION_Y,
     MIN_WIDTH_PINS: MIN_WIDTH_PINS,
     MIN_HEIGHT_PINS: MIN_HEIGHT_PINS,
-    mapElement: mapElement,
-    mapPinMainElement: mapPinMainElement,
-    adFormElement: adFormElement,
+    getMapElement: getMapElement(),
+    getMapPinMainElement: getMapPinMainElement(),
+    getAdFormElement: getAdFormElement(),
     setAddressCoords: setAddressCoords
   };
 })();
+

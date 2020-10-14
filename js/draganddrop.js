@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  let mapPinMainElement = window.main.mapPinMainElement;
+  let mapPinMainElement = window.main.getMapPinMainElement;
 
   let MAIN_PIN_WIDTH = mapPinMainElement.clientWidth;
   let MAIN_PIN_HEIGHT = mapPinMainElement.clientHeight;
@@ -31,7 +31,7 @@
     mapPinMainElement.style.top = y + `px`;
     mapPinMainElement.style.left = x + `px`;
 
-    window.form.pinAddressInputElement.value = Math.round(parseInt(mapPinMainElement.style.left, 10) + MAIN_PIN_WIDTH / 2) + `, ` + Math.round(parseInt(mapPinMainElement.style.top, 10) + MAIN_PIN_HEIGHT / 2);
+    window.form.getPinAddressInputElement.value = Math.round(parseInt(mapPinMainElement.style.left, 10) + MAIN_PIN_WIDTH / 2) + `, ` + Math.round(parseInt(mapPinMainElement.style.top, 10) + MAIN_PIN_HEIGHT / 2);
   };
 
   let onMainPinMouseMove = function (evt) {
