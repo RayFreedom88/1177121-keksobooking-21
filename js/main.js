@@ -18,18 +18,20 @@
   let mapElement = document.querySelector(`.map`);
 
   let mapPinMainElement = document.querySelector(`.map__pin--main`);
+  let mapFiltersContainer = mapElement.querySelector(`.map__filters-container`);
   let mapFiltersElements = document.querySelectorAll(`.map__filter`);
 
   let adFormElement = document.querySelector(`.ad-form`);
   let adFormFieldsetElements = adFormElement.querySelectorAll(`fieldset`);
   let pinAddressInputElement = adFormElement.querySelector(`#address`);
 
+  let offers = [];
+
   const getMapElement = () => mapElement;
   const getMapPinMainElement = () => mapPinMainElement;
+  const getMapFiltersContainer = () => mapFiltersContainer;
   const getAdFormElement = () => adFormElement;
   const getPinAddressInputElement = () => pinAddressInputElement;
-
-  let offers = [];
 
   /* функция отрисовки пинов */
 
@@ -130,6 +132,7 @@
   };
 
   window.main = {
+    MAX_COUNT: MAX_COUNT,
     MAX_LOCATION_X: MAX_LOCATION_X,
     MIN_LOCATION_X: MIN_LOCATION_X,
     MIN_LOCATION_Y: MIN_LOCATION_Y,
@@ -138,8 +141,13 @@
     MIN_HEIGHT_PINS: MIN_HEIGHT_PINS,
     getMapElement: getMapElement(),
     getMapPinMainElement: getMapPinMainElement(),
+    getMapFiltersContainer: getMapFiltersContainer(),
     getAdFormElement: getAdFormElement(),
     getPinAddressInputElement: getPinAddressInputElement(),
-    getDeactivePage: getDeactivePage
+    offers: function () {
+      return offers;
+    },
+    getDeactivePage: getDeactivePage,
+    createPins: createPins
   };
 })();
