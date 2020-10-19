@@ -6,7 +6,7 @@
   let MIN_HEIGHT_PINS = window.main.MIN_HEIGHT_PINS;
 
   let mapPinsElement = map.querySelector(`.map__pins`);
-  let mapFiltersContainer = map.querySelector(`.map__filters-container`);
+  let mapFiltersContainer = window.main.getMapFiltersContainer;
 
   const getMapPinsElement = () => mapPinsElement;
 

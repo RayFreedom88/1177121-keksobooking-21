@@ -3,6 +3,7 @@
 (function () {
   let URL_LOAD = `https://21.javascript.pages.academy/keksobooking/data`;
   let URL_UPLOAD = `https://21.javascript.pages.academy/keksobooking`;
+  let OK_CODE = 200;
   let TIMEOUT = 10000;
 
   let request = function (onSuccess, onError, data) {
@@ -11,7 +12,7 @@
     xhr.timeout = TIMEOUT;
 
     xhr.addEventListener(`load`, function () {
-      if (xhr.status === 200) {
+      if (xhr.status === OK_CODE) {
         onSuccess(xhr.response);
       } else {
         onError(`Cтатус ответа: ` + xhr.status + ` ` + xhr.statusText);
