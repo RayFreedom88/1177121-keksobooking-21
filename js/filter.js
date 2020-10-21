@@ -57,11 +57,11 @@
     });
   };
 
-  let onFilterFormChange = function () {
+  let onFilterFormChange = window.debounce(function () {
     window.card.removePopup();
     window.pin.removePins();
     window.main.createPins(filterData(window.main.offers()).slice(0, window.main.MAX_COUNT));
-  };
+  });
 
   filterFormElement.addEventListener(`change`, onFilterFormChange);
 
