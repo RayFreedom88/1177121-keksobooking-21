@@ -11,6 +11,7 @@ module.exports = {
     "./js/modules/card.js",
     "./js/modules/form.js",
     "./js/modules/filter.js",
+    "./js/modules/preview.js",
     "./js/modules/draganddrop.js",
   ],
   output: {

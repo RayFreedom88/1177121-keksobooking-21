@@ -125,6 +125,7 @@ let getDeactivePage = function () {
 
   window.card.removePopup();
   window.pin.removePins();
+  window.preview.resetPreview();
 
   mapPinMainElement.addEventListener(`mousedown`, getActivePage);
   mapPinMainElement.addEventListener(`keydown`, getActivePage);
