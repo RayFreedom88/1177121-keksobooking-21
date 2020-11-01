@@ -34,7 +34,7 @@ let setMainPinMove = function (shift) {
 };
 
 let onMainPinMouseMove = function (evt) {
-  if (evt.button === 0) {
+  if (evt.button === window.util.key.LEFT_MOUSE) {
     evt.preventDefault();
 
     let startCoords = {

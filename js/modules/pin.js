@@ -16,7 +16,7 @@ let getPin = function (booking) {
   pinElement.querySelector(`img`).src = booking.author.avatar;
   pinElement.querySelector(`img`).alt = booking.offer.description;
 
-  let locationX = booking.location.x - MIN_WIDTH_PINS + `px`;
+  let locationX = booking.location.x - MIN_WIDTH_PINS / 2 + `px`;
   let locationY = booking.location.y - MIN_HEIGHT_PINS + `px`;
 
   pinElement.style.left = locationX;
@@ -25,6 +25,8 @@ let getPin = function (booking) {
   mapPinsElement.appendChild(pinElement);
 
   pinElement.addEventListener(`click`, function () {
+    removeActivePin();
+    pinElement.classList.add(`map__pin--active`);
     window.card.removePopup();
 
     map.insertBefore(window.card.getCard(booking), mapFiltersContainer);
@@ -43,8 +45,17 @@ let removePins = function () {
   }
 };
 
+let removeActivePin = function () {
+  let activePin = map.querySelector(`.map__pin--active`);
+
+  if (activePin !== null) {
+    activePin.classList.remove(`map__pin--active`);
+  }
+};
+
 window.pin = {
   getMapPinsElement: getMapPinsElement(),
   getPin: getPin,
-  removePins: removePins
+  removePins: removePins,
+  removeActivePin: removeActivePin
 };

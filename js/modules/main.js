@@ -76,13 +76,16 @@ let onSuccess = function (data) {
   });
 
   createPins(offers.slice(0, MAX_COUNT));
+
+  mapPinMainElement.removeEventListener(`mousedown`, onMainPinMouseDown);
+  mapPinMainElement.removeEventListener(`keydown`, onMainPinKeyDown);
 };
 
 let onError = function (message) {
   window.message.onErrorSend(message);
 };
 
-let activePage = function () {
+let getActivePage = function () {
   setFormActive(adFormFieldsetElements);
   setFormActive(mapFiltersElements);
   mapElement.classList.remove(`map--faded`);
@@ -92,17 +95,20 @@ let activePage = function () {
 
 // активации страницы
 
-let getActivePage = function (evt) {
-  if (evt.key === `Enter` || evt.button === 0) {
-    activePage();
+let onMainPinMouseDown = function (evt) {
+  if (evt.button === window.util.key.LEFT_MOUSE) {
+    getActivePage();
   }
+};
 
-  mapPinMainElement.removeEventListener(`mousedown`, getActivePage);
-  mapPinMainElement.removeEventListener(`keydown`, getActivePage);
+let onMainPinKeyDown = function (evt) {
+  window.util.isEnterEvent(evt, function () {
+    getActivePage();
+  });
 };
 
 mapPinMainElement.addEventListener(`mousedown`, getActivePage);
-mapPinMainElement.addEventListener(`keydown`, getActivePage);
+mapPinMainElement.addEventListener(`keydown`, onMainPinKeyDown);
 
 // деактивация страницы
 

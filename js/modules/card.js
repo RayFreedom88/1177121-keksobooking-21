@@ -1,7 +1,19 @@
 'use strict';
 
 let map = window.main.getMapElement;
-let onEscKeyDown = window.card.onEscKeyDown;
+let isEscEvent = window.util.isEscEvent;
+
+let onEscKeyDown = function (evt) {
+  let popup = map.querySelector(`.popup`);
+
+  isEscEvent(evt, function () {
+    if (popup !== null) {
+      removePopup();
+      document.removeEventListener(`keydown`, onEscKeyDown);
+      window.pin.removeActivePin();
+    }
+  });
+};
 
 let getCard = function (booking) {
   let cardTemplate = document.querySelector(`#card`).content;
@@ -24,9 +36,9 @@ let getCard = function (booking) {
 
   let featureItems = cardElement.querySelectorAll(`.popup__feature`);
 
-  for (let i = 0; i < featureItems.length; i++) {
-    if (featureItems[i].indexOf === booking.offer.features[i]) {
-      featureItems[i].style.opacity = 0.3;
+  for (let feature of featureItems) {
+    if (booking.offer.features.indexOf(feature.classList[1].replace(`popup__feature--`, ``)) < 0) {
+      feature.remove();
     }
   }
 
@@ -52,7 +64,7 @@ let getCard = function (booking) {
 
   popupClose.addEventListener(`click`, function () {
     removePopup();
-
+    window.pin.removeActivePin();
     document.removeEventListener(`keydown`, onEscKeyDown);
   });
 
