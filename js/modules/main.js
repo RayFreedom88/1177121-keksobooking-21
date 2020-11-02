@@ -36,7 +36,7 @@ const getPinAddressInputElement = () => pinAddressInputElement;
 
 let createPins = function (bookings) {
   let fragment = document.createDocumentFragment();
-  let mapPinsElement = window.pin.getMapPinsElement;
+  let mapPinsElement = window.pin.mapPinsElement;
 
   bookings.forEach(function (booking) {
     fragment.appendChild(window.pin.getPin(booking));
@@ -145,11 +145,11 @@ window.main = {
   MAX_LOCATION_Y: MAX_LOCATION_Y,
   MIN_WIDTH_PINS: MIN_WIDTH_PINS,
   MIN_HEIGHT_PINS: MIN_HEIGHT_PINS,
-  getMapElement: getMapElement(),
-  getMapPinMainElement: getMapPinMainElement(),
-  getMapFiltersContainer: getMapFiltersContainer(),
-  getAdFormElement: getAdFormElement(),
-  getPinAddressInputElement: getPinAddressInputElement(),
+  mapElement: getMapElement(),
+  mapPinMainElement: getMapPinMainElement(),
+  mapFiltersContainer: getMapFiltersContainer(),
+  adFormElement: getAdFormElement(),
+  pinAddressInputElement: getPinAddressInputElement(),
   offers: function () {
     return offers;
   },

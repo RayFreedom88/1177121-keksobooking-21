@@ -1,11 +1,11 @@
 'use strict';
 
-let map = window.main.getMapElement;
+let map = window.main.mapElement;
 let MIN_WIDTH_PINS = window.main.MIN_WIDTH_PINS;
 let MIN_HEIGHT_PINS = window.main.MIN_HEIGHT_PINS;
 
 let mapPinsElement = map.querySelector(`.map__pins`);
-let mapFiltersContainer = window.main.getMapFiltersContainer;
+let mapFiltersContainer = window.main.mapFiltersContainer;
 
 const getMapPinsElement = () => mapPinsElement;
 
@@ -54,7 +54,7 @@ let removeActivePin = function () {
 };
 
 window.pin = {
-  getMapPinsElement: getMapPinsElement(),
+  mapPinsElement: getMapPinsElement(),
   getPin: getPin,
   removePins: removePins,
   removeActivePin: removeActivePin

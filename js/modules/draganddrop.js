@@ -1,6 +1,6 @@
 'use strict';
 
-let mapPinMainElement = window.main.getMapPinMainElement;
+let mapPinMainElement = window.main.mapPinMainElement;
 
 let MAIN_PIN_WIDTH = mapPinMainElement.clientWidth;
 let MAIN_PIN_HEIGHT = mapPinMainElement.clientHeight;
@@ -30,10 +30,10 @@ let setMainPinMove = function (shift) {
   mapPinMainElement.style.top = y + `px`;
   mapPinMainElement.style.left = x + `px`;
 
-  window.main.getPinAddressInputElement.value = Math.round(parseInt(mapPinMainElement.style.left, 10) + MAIN_PIN_WIDTH / 2) + `, ` + Math.round(parseInt(mapPinMainElement.style.top, 10) + MAIN_PIN_HEIGHT / 2);
+  window.main.pinAddressInputElement.value = Math.round(parseInt(mapPinMainElement.style.left, 10) + MAIN_PIN_WIDTH / 2) + `, ` + Math.round(parseInt(mapPinMainElement.style.top, 10) + MAIN_PIN_HEIGHT / 2);
 };
 
-let onMainPinMouseMove = function (evt) {
+let onMainPinGrab = function (evt) {
   if (evt.button === window.util.key.LEFT_MOUSE) {
     evt.preventDefault();
 
@@ -69,5 +69,5 @@ let onMainPinMouseMove = function (evt) {
   }
 };
 
-mapPinMainElement.addEventListener(`mousedown`, onMainPinMouseMove);
+mapPinMainElement.addEventListener(`mousedown`, onMainPinGrab);
 

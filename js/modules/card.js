@@ -1,6 +1,6 @@
 'use strict';
 
-let map = window.main.getMapElement;
+let map = window.main.mapElement;
 let isEscEvent = window.util.isEscEvent;
 
 let onEscKeyDown = function (evt) {

@@ -1,6 +1,6 @@
 'use strict';
 
-let adFormElement = window.main.getAdFormElement;
+let adFormElement = window.main.adFormElement;
 
 let selectTypeElement = adFormElement.querySelector(`#type`);
 let inputPriceElement = adFormElement.querySelector(`#price`);
@@ -41,7 +41,7 @@ let numberGuest = {
 
 // отключение ручного редактирования поля адреса формы
 
-window.main.getPinAddressInputElement.readOnly = true;
+window.main.pinAddressInputElement.readOnly = true;
 
 // валидация типа жилья и цены за ночь
 

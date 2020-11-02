@@ -1,6 +1,8 @@
 'use strict';
 
-let filterFormElement = window.main.getMapFiltersContainer.querySelector(`form`);
+const DEFAULT_FILTER_VALUE = `any`;
+
+let filterFormElement = window.main.mapFiltersContainer.querySelector(`form`);
 
 let priceMap = {
   'low': {
@@ -51,7 +53,7 @@ let filterValidation = {
 let filterData = function (data) {
   return data.filter(function (item) {
     return filterElements.every(function (filter) {
-      return (filter.value === `any`) ? true : filterValidation[filter.id](item, filter);
+      return (filter.value === DEFAULT_FILTER_VALUE) ? true : filterValidation[filter.id](item, filter);
     });
   });
 };
