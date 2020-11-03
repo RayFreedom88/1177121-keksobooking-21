@@ -1,18 +1,9 @@
 'use strict';
 
-const MAX_COUNT = 5;
+const MAX_COUNT = window.constants.MAX_COUNT;
 
-const MIN_LOCATION_X = 0;
-const MAX_LOCATION_X = document.querySelector(`.map`).offsetWidth;
-
-const MIN_LOCATION_Y = 130;
-const MAX_LOCATION_Y = 630;
-
-const MIN_WIDTH_PINS = 50;
-const MIN_HEIGHT_PINS = 70;
-
-const COORDS_X = 570;
-const COORDS_Y = 375;
+const COORDS_X = window.constants.COORDS_X;
+const COORDS_Y = window.constants.COORDS_Y;
 
 let mapElement = document.querySelector(`.map`);
 
@@ -36,7 +27,7 @@ const getPinAddressInputElement = () => pinAddressInputElement;
 
 let createPins = function (bookings) {
   let fragment = document.createDocumentFragment();
-  let mapPinsElement = window.pin.getMapPinsElement;
+  let mapPinsElement = window.pin.mapPinsElement;
 
   bookings.forEach(function (booking) {
     fragment.appendChild(window.pin.getPin(booking));
@@ -76,13 +67,16 @@ let onSuccess = function (data) {
   });
 
   createPins(offers.slice(0, MAX_COUNT));
+
+  mapPinMainElement.removeEventListener(`mousedown`, onMainPinMouseDown);
+  mapPinMainElement.removeEventListener(`keydown`, onMainPinKeyDown);
 };
 
 let onError = function (message) {
   window.message.onErrorSend(message);
 };
 
-let activePage = function () {
+let getActivePage = function () {
   setFormActive(adFormFieldsetElements);
   setFormActive(mapFiltersElements);
   mapElement.classList.remove(`map--faded`);
@@ -92,17 +86,20 @@ let activePage = function () {
 
 // активации страницы
 
-let getActivePage = function (evt) {
-  if (evt.key === `Enter` || evt.button === 0) {
-    activePage();
+let onMainPinMouseDown = function (evt) {
+  if (evt.button === window.util.key.LEFT_MOUSE) {
+    getActivePage();
   }
-
-  mapPinMainElement.removeEventListener(`mousedown`, getActivePage);
-  mapPinMainElement.removeEventListener(`keydown`, getActivePage);
 };
 
-mapPinMainElement.addEventListener(`mousedown`, getActivePage);
-mapPinMainElement.addEventListener(`keydown`, getActivePage);
+let onMainPinKeyDown = function (evt) {
+  window.util.isEnterEvent(evt, function () {
+    getActivePage();
+  });
+};
+
+mapPinMainElement.addEventListener(`mousedown`, onMainPinMouseDown);
+mapPinMainElement.addEventListener(`keydown`, onMainPinKeyDown);
 
 // деактивация страницы
 
@@ -132,21 +129,16 @@ let getDeactivePage = function () {
 };
 
 window.main = {
-  MAX_COUNT: MAX_COUNT,
-  MAX_LOCATION_X: MAX_LOCATION_X,
-  MIN_LOCATION_X: MIN_LOCATION_X,
-  MIN_LOCATION_Y: MIN_LOCATION_Y,
-  MAX_LOCATION_Y: MAX_LOCATION_Y,
-  MIN_WIDTH_PINS: MIN_WIDTH_PINS,
-  MIN_HEIGHT_PINS: MIN_HEIGHT_PINS,
-  getMapElement: getMapElement(),
-  getMapPinMainElement: getMapPinMainElement(),
-  getMapFiltersContainer: getMapFiltersContainer(),
-  getAdFormElement: getAdFormElement(),
-  getPinAddressInputElement: getPinAddressInputElement(),
+  mapElement: getMapElement(),
+  mapPinMainElement: getMapPinMainElement(),
+  mapFiltersContainer: getMapFiltersContainer(),
+  adFormElement: getAdFormElement(),
+  pinAddressInputElement: getPinAddressInputElement(),
+
   offers: function () {
     return offers;
   },
+
   getDeactivePage: getDeactivePage,
   createPins: createPins
 };

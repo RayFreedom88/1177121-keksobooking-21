@@ -1,11 +1,12 @@
 'use strict';
 
-let map = window.main.getMapElement;
-let MIN_WIDTH_PINS = window.main.MIN_WIDTH_PINS;
-let MIN_HEIGHT_PINS = window.main.MIN_HEIGHT_PINS;
+const MIN_WIDTH_PINS = window.constants.MIN_WIDTH_PINS;
+const MIN_HEIGHT_PINS = window.constants.MIN_HEIGHT_PINS;
 
-let mapPinsElement = map.querySelector(`.map__pins`);
-let mapFiltersContainer = window.main.getMapFiltersContainer;
+let mapElement = window.main.mapElement;
+
+let mapPinsElement = mapElement.querySelector(`.map__pins`);
+let mapFiltersContainer = window.main.mapFiltersContainer;
 
 const getMapPinsElement = () => mapPinsElement;
 
@@ -16,7 +17,7 @@ let getPin = function (booking) {
   pinElement.querySelector(`img`).src = booking.author.avatar;
   pinElement.querySelector(`img`).alt = booking.offer.description;
 
-  let locationX = booking.location.x - MIN_WIDTH_PINS + `px`;
+  let locationX = booking.location.x - MIN_WIDTH_PINS / 2 + `px`;
   let locationY = booking.location.y - MIN_HEIGHT_PINS + `px`;
 
   pinElement.style.left = locationX;
@@ -25,16 +26,18 @@ let getPin = function (booking) {
   mapPinsElement.appendChild(pinElement);
 
   pinElement.addEventListener(`click`, function () {
+    removeActivePin();
+    pinElement.classList.add(`map__pin--active`);
     window.card.removePopup();
 
-    map.insertBefore(window.card.getCard(booking), mapFiltersContainer);
+    mapElement.insertBefore(window.card.getCard(booking), mapFiltersContainer);
   });
 
   return pinElement;
 };
 
 let removePins = function () {
-  let pinsOnMap = map.querySelectorAll(`.map__pin:not(.map__pin--main)`);
+  let pinsOnMap = mapElement.querySelectorAll(`.map__pin:not(.map__pin--main)`);
 
   if (pinsOnMap.length > 0) {
     pinsOnMap.forEach(function (pin) {
@@ -43,8 +46,17 @@ let removePins = function () {
   }
 };
 
+let removeActivePin = function () {
+  let activePin = mapElement.querySelector(`.map__pin--active`);
+
+  if (activePin !== null) {
+    activePin.classList.remove(`map__pin--active`);
+  }
+};
+
 window.pin = {
-  getMapPinsElement: getMapPinsElement(),
+  mapPinsElement: getMapPinsElement(),
   getPin: getPin,
-  removePins: removePins
+  removePins: removePins,
+  removeActivePin: removeActivePin
 };

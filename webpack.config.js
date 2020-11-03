@@ -2,8 +2,9 @@ const path = require("path");
 
 module.exports = {
   entry: [
-    "./js/modules/main.js",
+    "./js/modules/constants.js",
     "./js/modules/util.js",
+    "./js/modules/main.js",
     "./js/modules/debounce.js",
     "./js/modules/message.js",
     "./js/modules/beckend.js",
@@ -16,7 +17,7 @@ module.exports = {
   ],
   output: {
     filename: "bundle.js",
-    path: path.resolve(__dirname, "js"),
+    path: path.resolve(__dirname),
     iife: true
   },
   devtool: false

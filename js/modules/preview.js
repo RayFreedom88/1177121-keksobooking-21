@@ -8,7 +8,7 @@ let Photo = {
   ALT: `Фотография жилья`
 };
 
-let form = window.main.getAdFormElement;
+let form = window.main.adFormElement;
 
 let fileChooserAvatar = form.querySelector(`.ad-form-header__upload input[type=file]`);
 let previewAvatar = form.querySelector(`.ad-form-header__upload img`);

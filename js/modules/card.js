@@ -1,7 +1,22 @@
 'use strict';
 
-let map = window.main.getMapElement;
-let onEscKeyDown = window.card.onEscKeyDown;
+let isEscEvent = window.util.isEscEvent;
+
+let types = window.constants.TYPES;
+
+let mapElement = window.main.mapElement;
+
+let onEscKeyDown = function (evt) {
+  let popup = mapElement.querySelector(`.popup`);
+
+  isEscEvent(evt, function () {
+    if (popup !== null) {
+      removePopup();
+      document.removeEventListener(`keydown`, onEscKeyDown);
+      window.pin.removeActivePin();
+    }
+  });
+};
 
 let getCard = function (booking) {
   let cardTemplate = document.querySelector(`#card`).content;
@@ -16,7 +31,7 @@ let getCard = function (booking) {
 
   cardElement.querySelector(`.popup__text--price`).textContent = booking.offer.price + `₽/ночь`;
 
-  cardElement.querySelector(`.popup__type`).textContent = booking.offer.type;
+  cardElement.querySelector(`.popup__type`).textContent = types[booking.offer.type].ru;
 
   cardElement.querySelector(`.popup__text--capacity`).textContent = `${booking.offer.rooms} ${booking.offer.rooms === 1 ? `комната` : `комнаты`} для ${booking.offer.guests} ${booking.offer.guests === 1 ? `гостя` : `гостей`}`;
 
@@ -24,9 +39,9 @@ let getCard = function (booking) {
 
   let featureItems = cardElement.querySelectorAll(`.popup__feature`);
 
-  for (let i = 0; i < featureItems.length; i++) {
-    if (featureItems[i].indexOf === booking.offer.features[i]) {
-      featureItems[i].style.opacity = 0.3;
+  for (let feature of featureItems) {
+    if (booking.offer.features.indexOf(feature.classList[1].replace(`popup__feature--`, ``)) < 0) {
+      feature.remove();
     }
   }
 
@@ -52,7 +67,7 @@ let getCard = function (booking) {
 
   popupClose.addEventListener(`click`, function () {
     removePopup();
-
+    window.pin.removeActivePin();
     document.removeEventListener(`keydown`, onEscKeyDown);
   });
 
@@ -60,7 +75,7 @@ let getCard = function (booking) {
 };
 
 let removePopup = function () {
-  let popup = map.querySelector(`.popup`);
+  let popup = mapElement.querySelector(`.popup`);
 
   if (popup !== null) {
     popup.remove();

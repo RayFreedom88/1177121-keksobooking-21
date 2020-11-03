@@ -1,28 +1,27 @@
 'use strict';
 
-let ESC_KEYCODE = 27;
-let map = window.main.getMapElement;
-let removePopup = window.card.removePopup;
+let Key = {
+  LEFT_MOUSE: 0,
+  ENTER: 13,
+  ESC: 27
+};
+
+let isEnterEvent = function (evt, actionFn) {
+  if (evt.keyCode === Key.ENTER) {
+    actionFn();
+  }
+};
 
 let isEscEvent = function (evt, actionFn) {
-  if (evt.keyCode === ESC_KEYCODE) {
+  if (evt.keyCode === Key.ESC) {
     evt.preventDefault();
     actionFn();
   }
 };
 
-let onEscKeyDown = function (evt) {
-  let popup = map.querySelector(`.popup`);
-
-  isEscEvent(evt, function () {
-    if (popup !== null) {
-      removePopup();
-    }
-  });
-};
-
 window.util = {
-  isEscEvent: isEscEvent,
-  onEscKeyDown: onEscKeyDown
+  key: Key,
+  isEnterEvent: isEnterEvent,
+  isEscEvent: isEscEvent
 };
 
