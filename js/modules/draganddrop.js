@@ -5,11 +5,11 @@ let mapPinMainElement = window.main.mapPinMainElement;
 let MAIN_PIN_WIDTH = mapPinMainElement.clientWidth;
 let MAIN_PIN_HEIGHT = mapPinMainElement.clientHeight;
 
-let MIN_LOCATION_X = window.defaults.MIN_LOCATION_X;
-let MIN_LOCATION_Y = window.defaults.MIN_LOCATION_Y;
+let MIN_LOCATION_X = window.constants.MIN_LOCATION_X;
+let MIN_LOCATION_Y = window.constants.MIN_LOCATION_Y;
 
-let MAX_LOCATION_Y = window.defaults.MAX_LOCATION_Y;
-let MAX_LOCATION_X = window.defaults.MAX_LOCATION_X;
+let MAX_LOCATION_Y = window.constants.MAX_LOCATION_Y;
+let MAX_LOCATION_X = window.constants.MAX_LOCATION_X;
 
 let setMainPinMove = function (shift) {
   let y = mapPinMainElement.offsetTop - shift.y;
