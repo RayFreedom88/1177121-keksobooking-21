@@ -1,7 +1,10 @@
 'use strict';
 
-let map = window.main.mapElement;
 let isEscEvent = window.util.isEscEvent;
+
+let types = window.defaults.types;
+
+let map = window.main.mapElement;
 
 let onEscKeyDown = function (evt) {
   let popup = map.querySelector(`.popup`);
@@ -28,7 +31,7 @@ let getCard = function (booking) {
 
   cardElement.querySelector(`.popup__text--price`).textContent = booking.offer.price + `₽/ночь`;
 
-  cardElement.querySelector(`.popup__type`).textContent = booking.offer.type;
+  cardElement.querySelector(`.popup__type`).textContent = types[booking.offer.type].ru;
 
   cardElement.querySelector(`.popup__text--capacity`).textContent = `${booking.offer.rooms} ${booking.offer.rooms === 1 ? `комната` : `комнаты`} для ${booking.offer.guests} ${booking.offer.guests === 1 ? `гостя` : `гостей`}`;
 

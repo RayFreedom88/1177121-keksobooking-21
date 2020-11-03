@@ -1,10 +1,11 @@
 'use strict';
 
-let map = window.main.mapElement;
-let MIN_WIDTH_PINS = window.main.MIN_WIDTH_PINS;
-let MIN_HEIGHT_PINS = window.main.MIN_HEIGHT_PINS;
+const MIN_WIDTH_PINS = window.defaults.MIN_WIDTH_PINS;
+const MIN_HEIGHT_PINS = window.defaults.MIN_HEIGHT_PINS;
 
-let mapPinsElement = map.querySelector(`.map__pins`);
+let mapElement = window.main.mapElement;
+
+let mapPinsElement = mapElement.querySelector(`.map__pins`);
 let mapFiltersContainer = window.main.mapFiltersContainer;
 
 const getMapPinsElement = () => mapPinsElement;
@@ -29,14 +30,14 @@ let getPin = function (booking) {
     pinElement.classList.add(`map__pin--active`);
     window.card.removePopup();
 
-    map.insertBefore(window.card.getCard(booking), mapFiltersContainer);
+    mapElement.insertBefore(window.card.getCard(booking), mapFiltersContainer);
   });
 
   return pinElement;
 };
 
 let removePins = function () {
-  let pinsOnMap = map.querySelectorAll(`.map__pin:not(.map__pin--main)`);
+  let pinsOnMap = mapElement.querySelectorAll(`.map__pin:not(.map__pin--main)`);
 
   if (pinsOnMap.length > 0) {
     pinsOnMap.forEach(function (pin) {
@@ -46,7 +47,7 @@ let removePins = function () {
 };
 
 let removeActivePin = function () {
-  let activePin = map.querySelector(`.map__pin--active`);
+  let activePin = mapElement.querySelector(`.map__pin--active`);
 
   if (activePin !== null) {
     activePin.classList.remove(`map__pin--active`);

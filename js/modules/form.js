@@ -1,5 +1,7 @@
 'use strict';
 
+let types = window.defaults.types;
+
 let adFormElement = window.main.adFormElement;
 
 let selectTypeElement = adFormElement.querySelector(`#type`);
@@ -12,25 +14,6 @@ let selectTimeInElement = adFormElement.querySelector(`#timein`);
 let selectTimeOutElement = adFormElement.querySelector(`#timeout`);
 
 let adFormResetElement = adFormElement.querySelector(`.ad-form__reset`);
-
-let types = {
-  palace: {
-    ru: `Дворец`,
-    min: `10000`
-  },
-  flat: {
-    ru: `Квартира`,
-    min: `1000`
-  },
-  house: {
-    ru: `Дом`,
-    min: `5000`
-  },
-  bungalow: {
-    ru: `Бунгало`,
-    min: `0`
-  }
-};
 
 let numberGuest = {
   1: [1],

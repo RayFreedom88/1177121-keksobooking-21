@@ -1,18 +1,9 @@
 'use strict';
 
-const MAX_COUNT = 5;
+const MAX_COUNT = window.defaults.MAX_COUNT;
 
-const MIN_LOCATION_X = 0;
-const MAX_LOCATION_X = document.querySelector(`.map`).offsetWidth;
-
-const MIN_LOCATION_Y = 130;
-const MAX_LOCATION_Y = 630;
-
-const MIN_WIDTH_PINS = 50;
-const MIN_HEIGHT_PINS = 70;
-
-const COORDS_X = 570;
-const COORDS_Y = 375;
+const COORDS_X = window.defaults.COORDS_X;
+const COORDS_Y = window.defaults.COORDS_Y;
 
 let mapElement = document.querySelector(`.map`);
 
@@ -107,7 +98,7 @@ let onMainPinKeyDown = function (evt) {
   });
 };
 
-mapPinMainElement.addEventListener(`mousedown`, getActivePage);
+mapPinMainElement.addEventListener(`mousedown`, onMainPinMouseDown);
 mapPinMainElement.addEventListener(`keydown`, onMainPinKeyDown);
 
 // деактивация страницы
@@ -138,21 +129,16 @@ let getDeactivePage = function () {
 };
 
 window.main = {
-  MAX_COUNT: MAX_COUNT,
-  MAX_LOCATION_X: MAX_LOCATION_X,
-  MIN_LOCATION_X: MIN_LOCATION_X,
-  MIN_LOCATION_Y: MIN_LOCATION_Y,
-  MAX_LOCATION_Y: MAX_LOCATION_Y,
-  MIN_WIDTH_PINS: MIN_WIDTH_PINS,
-  MIN_HEIGHT_PINS: MIN_HEIGHT_PINS,
   mapElement: getMapElement(),
   mapPinMainElement: getMapPinMainElement(),
   mapFiltersContainer: getMapFiltersContainer(),
   adFormElement: getAdFormElement(),
   pinAddressInputElement: getPinAddressInputElement(),
+
   offers: function () {
     return offers;
   },
+
   getDeactivePage: getDeactivePage,
   createPins: createPins
 };
