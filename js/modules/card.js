@@ -2,12 +2,12 @@
 
 let isEscEvent = window.util.isEscEvent;
 
-let types = window.defaults.types;
+let types = window.constants.TYPES;
 
-let map = window.main.mapElement;
+let mapElement = window.main.mapElement;
 
 let onEscKeyDown = function (evt) {
-  let popup = map.querySelector(`.popup`);
+  let popup = mapElement.querySelector(`.popup`);
 
   isEscEvent(evt, function () {
     if (popup !== null) {
@@ -75,7 +75,7 @@ let getCard = function (booking) {
 };
 
 let removePopup = function () {
-  let popup = map.querySelector(`.popup`);
+  let popup = mapElement.querySelector(`.popup`);
 
   if (popup !== null) {
     popup.remove();

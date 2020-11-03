@@ -1,6 +1,6 @@
 'use strict';
 
-let defaults = {
+let constants = {
   MAX_COUNT: 5,
 
   MIN_WIDTH_PINS: 50,
@@ -15,7 +15,7 @@ let defaults = {
   COORDS_X: 630,
   COORDS_Y: 375,
 
-  types: {
+  TYPES: {
     palace: {
       ru: `Дворец`,
       min: `10000`
@@ -35,4 +35,4 @@ let defaults = {
   }
 };
 
-window.defaults = defaults;
+window.constants = constants;

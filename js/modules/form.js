@@ -1,6 +1,6 @@
 'use strict';
 
-let types = window.defaults.types;
+let types = window.constants.TYPES;
 
 let adFormElement = window.main.adFormElement;
 

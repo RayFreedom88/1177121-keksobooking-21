@@ -2,7 +2,7 @@ const path = require("path");
 
 module.exports = {
   entry: [
-    "./js/modules/defaults.js",
+    "./js/modules/constants.js",
     "./js/modules/util.js",
     "./js/modules/main.js",
     "./js/modules/debounce.js",

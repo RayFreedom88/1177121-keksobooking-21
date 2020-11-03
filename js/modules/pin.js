@@ -1,7 +1,7 @@
 'use strict';
 
-const MIN_WIDTH_PINS = window.defaults.MIN_WIDTH_PINS;
-const MIN_HEIGHT_PINS = window.defaults.MIN_HEIGHT_PINS;
+const MIN_WIDTH_PINS = window.constants.MIN_WIDTH_PINS;
+const MIN_HEIGHT_PINS = window.constants.MIN_HEIGHT_PINS;
 
 let mapElement = window.main.mapElement;
 

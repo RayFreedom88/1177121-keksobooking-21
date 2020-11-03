@@ -1,9 +1,9 @@
 'use strict';
 
-const MAX_COUNT = window.defaults.MAX_COUNT;
+const MAX_COUNT = window.constants.MAX_COUNT;
 
-const COORDS_X = window.defaults.COORDS_X;
-const COORDS_Y = window.defaults.COORDS_Y;
+const COORDS_X = window.constants.COORDS_X;
+const COORDS_Y = window.constants.COORDS_Y;
 
 let mapElement = document.querySelector(`.map`);
 
