@@ -64,7 +64,7 @@ let createPhotoElement = function (src) {
   photoContainer.insertBefore(element, previewPhoto);
 };
 
-let resetPreview = function () {
+let reset = function () {
   if (previews) {
     previews.forEach(function (element) {
       element.remove();
@@ -76,5 +76,5 @@ let resetPreview = function () {
 };
 
 window.preview = {
-  resetPreview: resetPreview
+  reset
 };

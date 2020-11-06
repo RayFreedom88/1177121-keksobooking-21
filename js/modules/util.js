@@ -21,7 +21,7 @@ let isEscEvent = function (evt, actionFn) {
 
 window.util = {
   key: Key,
-  isEnterEvent: isEnterEvent,
-  isEscEvent: isEscEvent
+  isEnterEvent,
+  isEscEvent
 };
 

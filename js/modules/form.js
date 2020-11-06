@@ -15,12 +15,7 @@ let selectTimeOutElement = adFormElement.querySelector(`#timeout`);
 
 let adFormResetElement = adFormElement.querySelector(`.ad-form__reset`);
 
-let numberGuest = {
-  1: [1],
-  2: [1, 2],
-  3: [1, 2, 3],
-  100: [0]
-};
+let numberGuest = window.constants.NUMBER_GUEST;
 
 // отключение ручного редактирования поля адреса формы
 
@@ -77,7 +72,7 @@ let onError = function () {
 
 let onSuccess = function () {
   window.message.onSuccessSend();
-  window.main.getDeactivePage();
+  window.main.deactivatePage();
 };
 
 let onFormSubmit = function (evt) {
@@ -89,6 +84,10 @@ adFormElement.addEventListener(`submit`, onFormSubmit);
 
 adFormResetElement.addEventListener(`click`, function (evt) {
   evt.preventDefault();
-  window.main.getDeactivePage();
+  window.main.deactivatePage();
 });
+
+window.form = {
+  onTypeSelectChange
+};
 

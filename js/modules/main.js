@@ -5,32 +5,27 @@ const MAX_COUNT = window.constants.MAX_COUNT;
 const COORDS_X = window.constants.COORDS_X;
 const COORDS_Y = window.constants.COORDS_Y;
 
-let mapElement = document.querySelector(`.map`);
+const mapElement = document.querySelector(`.map`);
 
-let mapPinMainElement = document.querySelector(`.map__pin--main`);
-let mapFiltersContainer = mapElement.querySelector(`.map__filters-container`);
-let mapFiltersElements = document.querySelectorAll(`.map__filter`);
+const mapPinMainElement = document.querySelector(`.map__pin--main`);
+const mapFiltersContainer = mapElement.querySelector(`.map__filters-container`);
+const mapFiltersElements = document.querySelectorAll(`.map__filter`);
 
-let adFormElement = document.querySelector(`.ad-form`);
+const adFormElement = document.querySelector(`.ad-form`);
+const pinAddressInputElement = adFormElement.querySelector(`#address`);
+
 let adFormFieldsetElements = adFormElement.querySelectorAll(`fieldset`);
-let pinAddressInputElement = adFormElement.querySelector(`#address`);
 
 let offers = [];
 
-const getMapElement = () => mapElement;
-const getMapPinMainElement = () => mapPinMainElement;
-const getMapFiltersContainer = () => mapFiltersContainer;
-const getAdFormElement = () => adFormElement;
-const getPinAddressInputElement = () => pinAddressInputElement;
-
 /* функция отрисовки пинов */
 
-let createPins = function (bookings) {
+let renderPins = function (bookings) {
   let fragment = document.createDocumentFragment();
   let mapPinsElement = window.pin.mapPinsElement;
 
   bookings.forEach(function (booking) {
-    fragment.appendChild(window.pin.getPin(booking));
+    fragment.appendChild(window.pin.create(booking));
   });
 
   mapPinsElement.appendChild(fragment);
@@ -66,7 +61,13 @@ let onSuccess = function (data) {
     return Object.keys(item.offer).length !== 0;
   });
 
-  createPins(offers.slice(0, MAX_COUNT));
+  renderPins(offers.slice(0, MAX_COUNT));
+
+  setFormActive(adFormFieldsetElements);
+  setFormActive(mapFiltersElements);
+
+  mapElement.classList.remove(`map--faded`);
+  adFormElement.classList.remove(`ad-form--disabled`);
 
   mapPinMainElement.removeEventListener(`mousedown`, onMainPinMouseDown);
   mapPinMainElement.removeEventListener(`keydown`, onMainPinKeyDown);
@@ -76,11 +77,7 @@ let onError = function (message) {
   window.message.onErrorSend(message);
 };
 
-let getActivePage = function () {
-  setFormActive(adFormFieldsetElements);
-  setFormActive(mapFiltersElements);
-  mapElement.classList.remove(`map--faded`);
-  adFormElement.classList.remove(`ad-form--disabled`);
+let activatePage = function () {
   window.backend.load(onSuccess, onError);
 };
 
@@ -88,13 +85,13 @@ let getActivePage = function () {
 
 let onMainPinMouseDown = function (evt) {
   if (evt.button === window.util.key.LEFT_MOUSE) {
-    getActivePage();
+    activatePage();
   }
 };
 
 let onMainPinKeyDown = function (evt) {
   window.util.isEnterEvent(evt, function () {
-    getActivePage();
+    activatePage();
   });
 };
 
@@ -108,11 +105,13 @@ let setMainPinStartCoords = function () {
   mapPinMainElement.style.top = COORDS_Y + `px`;
 };
 
-let getDeactivePage = function () {
+let deactivatePage = function () {
   mapElement.classList.add(`map--faded`);
 
   adFormElement.reset();
   adFormElement.classList.add(`ad-form--disabled`);
+
+  window.form.onTypeSelectChange();
 
   setFormDisabled(adFormFieldsetElements);
   setFormDisabled(mapFiltersElements);
@@ -120,25 +119,25 @@ let getDeactivePage = function () {
   setAddressCoords(COORDS_X, COORDS_Y);
   setMainPinStartCoords();
 
-  window.card.removePopup();
-  window.pin.removePins();
-  window.preview.resetPreview();
+  window.card.remove();
+  window.pin.remove();
+  window.preview.reset();
 
-  mapPinMainElement.addEventListener(`mousedown`, getActivePage);
-  mapPinMainElement.addEventListener(`keydown`, getActivePage);
+  mapPinMainElement.addEventListener(`mousedown`, onMainPinMouseDown);
+  mapPinMainElement.addEventListener(`keydown`, onMainPinKeyDown);
 };
 
 window.main = {
-  mapElement: getMapElement(),
-  mapPinMainElement: getMapPinMainElement(),
-  mapFiltersContainer: getMapFiltersContainer(),
-  adFormElement: getAdFormElement(),
-  pinAddressInputElement: getPinAddressInputElement(),
+  mapElement,
+  mapPinMainElement,
+  mapFiltersContainer,
+  adFormElement,
+  pinAddressInputElement,
 
-  offers: function () {
+  offers() {
     return offers;
   },
 
-  getDeactivePage: getDeactivePage,
-  createPins: createPins
+  deactivatePage,
+  renderPins
 };

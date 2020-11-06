@@ -57,6 +57,6 @@ let onSuccessMessageEscKeydown = function (evt) {
 };
 
 window.message = {
-  onErrorSend: onErrorSend,
-  onSuccessSend: onSuccessSend
+  onErrorSend,
+  onSuccessSend
 };

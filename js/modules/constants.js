@@ -12,8 +12,15 @@ let constants = {
   MIN_LOCATION_Y: 130,
   MAX_LOCATION_Y: 630,
 
-  COORDS_X: 630,
+  COORDS_X: 570,
   COORDS_Y: 375,
+
+  NUMBER_GUEST: {
+    1: [1],
+    2: [1, 2],
+    3: [1, 2, 3],
+    100: [0]
+  },
 
   TYPES: {
     palace: {
