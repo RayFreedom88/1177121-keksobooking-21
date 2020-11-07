@@ -1,6 +1,11 @@
 'use strict';
 
 let constants = {
+  COORDS_X: 570,
+  COORDS_Y: 375,
+
+  GUESTS_COUNT: 1,
+
   MAX_COUNT: 5,
 
   MIN_WIDTH_PINS: 50,
@@ -11,9 +16,6 @@ let constants = {
 
   MIN_LOCATION_Y: 130,
   MAX_LOCATION_Y: 630,
-
-  COORDS_X: 570,
-  COORDS_Y: 375,
 
   NUMBER_GUEST: {
     1: [1],

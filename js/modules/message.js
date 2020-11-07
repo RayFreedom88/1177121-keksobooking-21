@@ -2,8 +2,10 @@
 
 let mainElement = document.querySelector(`main`);
 
+let errorTemplate = document.querySelector(`#error`).content.querySelector(`.error`);
+let successTemplate = document.querySelector(`#success`).content.querySelector(`.success`);
+
 let onErrorSend = function (message) {
-  let errorTemplate = document.querySelector(`#error`).content.querySelector(`.error`);
   let errorElement = errorTemplate.cloneNode(true);
   errorElement.querySelector(`.error__message`).textContent = message;
   errorElement.querySelector(`.error__button`).addEventListener(`click`, onErrorMessageClick);
@@ -33,7 +35,6 @@ let onErrorMessageEscKeydown = function (evt) {
 };
 
 let onSuccessSend = function () {
-  let successTemplate = document.querySelector(`#success`).content.querySelector(`.success`);
   let successElement = successTemplate.cloneNode(true);
   mainElement.appendChild(successElement);
 

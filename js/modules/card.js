@@ -4,7 +4,9 @@ let isEscEvent = window.util.isEscEvent;
 
 let types = window.constants.TYPES;
 
-let mapElement = window.main.mapElement;
+let mapElement = window.mainElement.map;
+
+let cardTemplate = document.querySelector(`#card`).content;
 
 let onEscKeyDown = function (evt) {
   let popup = mapElement.querySelector(`.popup`);
@@ -19,7 +21,6 @@ let onEscKeyDown = function (evt) {
 };
 
 let create = function (booking) {
-  let cardTemplate = document.querySelector(`#card`).content;
   let cardElement = cardTemplate.querySelector(`.map__card`).cloneNode(true);
 
   cardElement.querySelector(`.popup__avatar`).src = booking.author.avatar;
@@ -33,7 +34,7 @@ let create = function (booking) {
 
   cardElement.querySelector(`.popup__type`).textContent = types[booking.offer.type].ru;
 
-  cardElement.querySelector(`.popup__text--capacity`).textContent = `${booking.offer.rooms} ${booking.offer.rooms === window.constants.NUMBER_GUEST[1][0] ? `комната` : `комнаты`} для ${booking.offer.guests} ${booking.offer.guests === window.constants.NUMBER_GUEST[1][0] ? `гостя` : `гостей`}`;
+  cardElement.querySelector(`.popup__text--capacity`).textContent = `${booking.offer.rooms} ${booking.offer.rooms === window.constants.GUESTS_COUNT ? `комната` : `комнаты`} для ${booking.offer.guests} ${booking.offer.guests === window.constants.GUESTS_COUNT ? `гостя` : `гостей`}`;
 
   cardElement.querySelector(`.popup__text--time`).textContent = `Заезд после ${booking.offer.checkin}, выезд до ${booking.offer.checkout}`;
 

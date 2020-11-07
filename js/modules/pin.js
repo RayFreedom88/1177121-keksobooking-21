@@ -3,15 +3,15 @@
 const MIN_WIDTH_PINS = window.constants.MIN_WIDTH_PINS;
 const MIN_HEIGHT_PINS = window.constants.MIN_HEIGHT_PINS;
 
-let mapElement = window.main.mapElement;
-
+let mapElement = window.mainElement.map;
 let mapPinsElement = mapElement.querySelector(`.map__pins`);
-let mapFiltersContainer = window.main.mapFiltersContainer;
+let mapFiltersContainer = window.filter.element.container;
 
-const getMapPinsElement = () => mapPinsElement;
+let pinTemplate = document.querySelector(`#pin`).content;
+
+// функция создания пинов
 
 let create = function (booking) {
-  let pinTemplate = document.querySelector(`#pin`).content;
   let pinElement = pinTemplate.querySelector(`.map__pin`).cloneNode(true);
 
   pinElement.querySelector(`img`).src = booking.author.avatar;
@@ -36,6 +36,20 @@ let create = function (booking) {
   return pinElement;
 };
 
+// функция отрисовки пинов
+
+let render = function (bookings) {
+  let fragment = document.createDocumentFragment();
+
+  bookings.forEach(function (booking) {
+    fragment.appendChild(create(booking));
+  });
+
+  mapPinsElement.appendChild(fragment);
+};
+
+// функции удаления пинов
+
 let remove = function () {
   let pinsOnMap = mapElement.querySelectorAll(`.map__pin:not(.map__pin--main)`);
 
@@ -55,8 +69,8 @@ let removeActive = function () {
 };
 
 window.pin = {
-  mapPinsElement: getMapPinsElement(),
   create,
+  render,
   remove,
   removeActive
 };

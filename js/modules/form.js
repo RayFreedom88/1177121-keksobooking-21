@@ -2,7 +2,10 @@
 
 let types = window.constants.TYPES;
 
-let adFormElement = window.main.adFormElement;
+const adFormElement = document.querySelector(`.ad-form`);
+const adFormFieldsetElements = adFormElement.querySelectorAll(`fieldset`);
+
+const pinAddressInputElement = adFormElement.querySelector(`#address`);
 
 let selectTypeElement = adFormElement.querySelector(`#type`);
 let inputPriceElement = adFormElement.querySelector(`#price`);
@@ -17,9 +20,43 @@ let adFormResetElement = adFormElement.querySelector(`.ad-form__reset`);
 
 let numberGuest = window.constants.NUMBER_GUEST;
 
+const mapFilterElements = window.filter.element.form.querySelectorAll(`.map__filter`);
+
 // отключение ручного редактирования поля адреса формы
 
-window.main.pinAddressInputElement.readOnly = true;
+pinAddressInputElement.readOnly = true;
+
+// поиск адрема метки
+
+let setAddressCoords = function (coordsX, coordsY) {
+  pinAddressInputElement.value = coordsX + `,` + coordsY;
+};
+
+// блокировка форм
+
+let setDisabled = function (items) {
+  for (let i = 0; i < items.length; i++) {
+    items[i].disabled = true;
+  }
+};
+
+let setFormDisabled = function () {
+  setDisabled(adFormFieldsetElements);
+  setDisabled(mapFilterElements);
+};
+
+// активация форм
+
+let setActive = function (items) {
+  for (let i = 0; i < items.length; i++) {
+    items[i].disabled = false;
+  }
+};
+
+let setFormActive = function () {
+  setActive(adFormFieldsetElements);
+  setActive(mapFilterElements);
+};
 
 // валидация типа жилья и цены за ночь
 
@@ -82,12 +119,22 @@ let onFormSubmit = function (evt) {
 
 adFormElement.addEventListener(`submit`, onFormSubmit);
 
+// сброс настроек формы
+
 adFormResetElement.addEventListener(`click`, function (evt) {
   evt.preventDefault();
   window.main.deactivatePage();
 });
 
 window.form = {
+  element: {
+    ad: adFormElement,
+    pinAddressInput: pinAddressInputElement,
+  },
+
+  setAddressCoords,
+  setDisabled: setFormDisabled,
+  setActive: setFormActive,
   onTypeSelectChange
 };
 

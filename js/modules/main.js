@@ -5,66 +5,32 @@ const MAX_COUNT = window.constants.MAX_COUNT;
 const COORDS_X = window.constants.COORDS_X;
 const COORDS_Y = window.constants.COORDS_Y;
 
-const mapElement = document.querySelector(`.map`);
+const mapElement = window.mainElement.map;
+const mapPinMainElement = window.mainElement.pin;
 
-const mapPinMainElement = document.querySelector(`.map__pin--main`);
-const mapFiltersContainer = mapElement.querySelector(`.map__filters-container`);
-const mapFiltersElements = document.querySelectorAll(`.map__filter`);
-
-const adFormElement = document.querySelector(`.ad-form`);
-const pinAddressInputElement = adFormElement.querySelector(`#address`);
-
-let adFormFieldsetElements = adFormElement.querySelectorAll(`fieldset`);
+const mapFiltersElement = window.filter.element.form;
+const adFormElement = window.form.element.ad;
 
 let offers = [];
 
-/* функция отрисовки пинов */
+/* поиск адреса главного пина */
 
-let renderPins = function (bookings) {
-  let fragment = document.createDocumentFragment();
-  let mapPinsElement = window.pin.mapPinsElement;
+window.form.setAddressCoords(COORDS_X, COORDS_Y);
 
-  bookings.forEach(function (booking) {
-    fragment.appendChild(window.pin.create(booking));
-  });
+/* блокировка формы */
 
-  mapPinsElement.appendChild(fragment);
-};
+window.form.setDisabled();
 
-/* блокировка форм */
-
-let setFormDisabled = function (items) {
-  for (let i = 0; i < items.length; i++) {
-    items[i].disabled = true;
-  }
-};
-
-setFormDisabled(adFormFieldsetElements);
-setFormDisabled(mapFiltersElements);
-
-/* активация страницы + вызов отрисовки пинов и карточек */
-
-let setFormActive = function (items) {
-  for (let i = 0; i < items.length; i++) {
-    items[i].disabled = false;
-  }
-};
-
-let setAddressCoords = function (coordsX, coordsY) {
-  pinAddressInputElement.value = coordsX + `,` + coordsY;
-};
-
-setAddressCoords(COORDS_X, COORDS_Y);
+/* активация страницы */
 
 let onSuccess = function (data) {
   offers = data.slice().filter(function (item) {
     return Object.keys(item.offer).length !== 0;
   });
 
-  renderPins(offers.slice(0, MAX_COUNT));
+  window.pin.render(offers.slice(0, MAX_COUNT));
 
-  setFormActive(adFormFieldsetElements);
-  setFormActive(mapFiltersElements);
+  window.form.setActive();
 
   mapElement.classList.remove(`map--faded`);
   adFormElement.classList.remove(`ad-form--disabled`);
@@ -108,15 +74,15 @@ let setMainPinStartCoords = function () {
 let deactivatePage = function () {
   mapElement.classList.add(`map--faded`);
 
+  mapFiltersElement.reset();
+
   adFormElement.reset();
   adFormElement.classList.add(`ad-form--disabled`);
 
   window.form.onTypeSelectChange();
+  window.form.setDisabled();
 
-  setFormDisabled(adFormFieldsetElements);
-  setFormDisabled(mapFiltersElements);
-
-  setAddressCoords(COORDS_X, COORDS_Y);
+  window.form.setAddressCoords(COORDS_X, COORDS_Y);
   setMainPinStartCoords();
 
   window.card.remove();
@@ -128,16 +94,9 @@ let deactivatePage = function () {
 };
 
 window.main = {
-  mapElement,
-  mapPinMainElement,
-  mapFiltersContainer,
-  adFormElement,
-  pinAddressInputElement,
-
   offers() {
     return offers;
   },
 
-  deactivatePage,
-  renderPins
+  deactivatePage
 };

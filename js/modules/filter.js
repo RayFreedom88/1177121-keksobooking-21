@@ -2,7 +2,9 @@
 
 const DEFAULT_FILTER_VALUE = `any`;
 
-let filterFormElement = window.main.mapFiltersContainer.querySelector(`form`);
+const mapElement = window.mainElement.map;
+const mapFiltersContainer = mapElement.querySelector(`.map__filters-container`);
+const mapFiltersElement = mapFiltersContainer.querySelector(`form`);
 
 let priceMap = {
   'low': {
@@ -19,7 +21,7 @@ let priceMap = {
   }
 };
 
-let filterElements = Array.from(filterFormElement.children);
+let filterElements = Array.from(mapFiltersElement.children);
 
 let filterValidation = {
   'housing-type': function (data, filter) {
@@ -61,9 +63,16 @@ let filterData = function (data) {
 let onFilterFormChange = window.debounce(function () {
   window.card.remove();
   window.pin.remove();
-  window.main.renderPins(filterData(window.main.offers()).slice(0, window.constants.MAX_COUNT));
+  window.pin.render(filterData(window.main.offers()).slice(0, window.constants.MAX_COUNT));
 });
 
-filterFormElement.addEventListener(`change`, onFilterFormChange);
+mapFiltersElement.addEventListener(`change`, onFilterFormChange);
 
-window.filter = filterData;
+window.filter = {
+  element: {
+    container: mapFiltersContainer,
+    form: mapFiltersElement,
+  },
+
+  filterData
+};
