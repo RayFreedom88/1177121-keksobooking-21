@@ -6,13 +6,13 @@ let Key = {
   ESC: 27
 };
 
-let isEnterEvent = function (evt, actionFn) {
+let onEnterEvent = function (evt, actionFn) {
   if (evt.keyCode === Key.ENTER) {
     actionFn();
   }
 };
 
-let isEscEvent = function (evt, actionFn) {
+let onEscEvent = function (evt, actionFn) {
   if (evt.keyCode === Key.ESC) {
     evt.preventDefault();
     actionFn();
@@ -21,7 +21,7 @@ let isEscEvent = function (evt, actionFn) {
 
 window.util = {
   key: Key,
-  isEnterEvent,
-  isEscEvent
+  onEnterEvent,
+  onEscEvent
 };
 

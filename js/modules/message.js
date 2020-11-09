@@ -1,97 +1,59 @@
 'use strict';
 
+let isError = false;
+
 let mainElement = document.querySelector(`main`);
 
 let errorTemplate = document.querySelector(`#error`).content.querySelector(`.error`);
 let successTemplate = document.querySelector(`#success`).content.querySelector(`.success`);
 
-let onResultSend = function (message) {
-  if (message) {
-    let errorMessageClose = function () {
-      let errorElement = document.querySelector(`.error`);
-      errorElement.remove();
-      document.removeEventListener(`keydown`, onErrorMessageEscKeydown);
-      document.removeEventListener(`mousedown`, onErrorMessageMouseDown);
-    };
-
-    let onErrorMessageClick = function () {
-      errorMessageClose();
-    };
-
-    let onErrorMessageMouseDown = function () {
-      errorMessageClose();
-    };
-
-    let onErrorMessageEscKeydown = function (evt) {
-      window.util.isEscEvent(evt, errorMessageClose);
-    };
-
-    let cloneErrorElement = errorTemplate.cloneNode(true);
-    cloneErrorElement.querySelector(`.error__message`).textContent = message;
-    cloneErrorElement.querySelector(`.error__button`).addEventListener(`click`, onErrorMessageClick);
-    mainElement.appendChild(cloneErrorElement);
-
-    document.addEventListener(`keydown`, onErrorMessageEscKeydown);
-    document.addEventListener(`mousedown`, onErrorMessageMouseDown);
-  } else {
-    let successMessageClose = function () {
-      let successElement = document.querySelector(`.success`);
-      successElement.remove();
-      document.removeEventListener(`keydown`, onSuccessMessageEscKeydown);
-      document.removeEventListener(`mousedown`, onSuccessMessageMouseDown);
-    };
-
-    let onSuccessMessageMouseDown = function () {
-      successMessageClose();
-    };
-
-    let onSuccessMessageEscKeydown = function (evt) {
-      window.util.isEscEvent(evt, successMessageClose);
-    };
-
-    let cloneSuccessElement = successTemplate.cloneNode(true);
-    mainElement.appendChild(cloneSuccessElement);
-
-    document.addEventListener(`keydown`, onSuccessMessageEscKeydown);
-    document.addEventListener(`mousedown`, onSuccessMessageMouseDown);
-  }
+let onErrorMessageClick = function () {
+  removeMessageElement();
 };
 
-// let errorMessageClose = function () {
-//   let errorElement = document.querySelector(`.error`);
-//   errorElement.remove();
-//   document.removeEventListener(`keydown`, onErrorMessageEscKeydown);
-//   document.removeEventListener(`mousedown`, onErrorMessageMouseDown);
-// };
+let onMouseDown = function () {
+  removeMessageElement();
+};
 
-// let onErrorMessageClick = function () {
-//   errorMessageClose();
-// };
+let onEscKeydown = function (evt) {
+  window.util.onEscEvent(evt, removeMessageElement);
+};
 
-// let onErrorMessageMouseDown = function () {
-//   errorMessageClose();
-// };
+let addMessageRemovers = function () {
+  document.addEventListener(`keydown`, onEscKeydown);
+  document.addEventListener(`mousedown`, onMouseDown);
+};
 
-// let onErrorMessageEscKeydown = function (evt) {
-//   window.util.isEscEvent(evt, errorMessageClose);
-// };
+let removeMessageElement = function () {
+  let selector = isError ? `.error` : `.success`;
 
-// let successMessageClose = function () {
-//   let successElement = document.querySelector(`.success`);
-//   successElement.remove();
-//   document.removeEventListener(`keydown`, onSuccessMessageEscKeydown);
-//   document.removeEventListener(`mousedown`, onSuccessMessageMouseDown);
-// };
+  document.querySelector(selector).remove();
 
-// let onSuccessMessageMouseDown = function () {
-//   successMessageClose();
-// };
+  document.removeEventListener(`keydown`, onEscKeydown);
+  document.removeEventListener(`mousedown`, onMouseDown);
+};
 
-// let onSuccessMessageEscKeydown = function (evt) {
-//   window.util.isEscEvent(evt, successMessageClose);
-// };
+let onErrorSend = function (message) {
+  isError = true;
+
+  let errorElement = errorTemplate.cloneNode(true);
+  errorElement.querySelector(`.error__message`).textContent = message;
+  errorElement.querySelector(`.error__button`).addEventListener(`click`, onErrorMessageClick);
+  mainElement.appendChild(errorElement);
+
+  addMessageRemovers();
+};
+
+let onSuccessSend = function () {
+  isError = false;
+
+  let successElement = successTemplate.cloneNode(true);
+  mainElement.appendChild(successElement);
+
+  addMessageRemovers();
+};
 
 window.message = {
-  onErrorSend: onResultSend,
-  onSuccessSend: onResultSend
+  onErrorSend,
+  onSuccessSend
 };

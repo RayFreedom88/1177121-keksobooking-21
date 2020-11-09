@@ -56,7 +56,7 @@ let onMainPinMouseDown = function (evt) {
 };
 
 let onMainPinKeyDown = function (evt) {
-  window.util.isEnterEvent(evt, function () {
+  window.util.onEnterEvent(evt, function () {
     activatePage();
   });
 };

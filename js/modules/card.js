@@ -1,6 +1,6 @@
 'use strict';
 
-let isEscEvent = window.util.isEscEvent;
+let onEscEvent = window.util.onEscEvent;
 
 let types = window.constants.TYPES;
 
@@ -11,7 +11,7 @@ let cardTemplate = document.querySelector(`#card`).content;
 let onEscKeyDown = function (evt) {
   let popup = mapElement.querySelector(`.popup`);
 
-  isEscEvent(evt, function () {
+  onEscEvent(evt, function () {
     if (popup !== null) {
       remove();
       document.removeEventListener(`keydown`, onEscKeyDown);
