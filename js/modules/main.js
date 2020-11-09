@@ -5,68 +5,35 @@ const MAX_COUNT = window.constants.MAX_COUNT;
 const COORDS_X = window.constants.COORDS_X;
 const COORDS_Y = window.constants.COORDS_Y;
 
-let mapElement = document.querySelector(`.map`);
+const mapElement = window.mainElement.map;
+const mapPinMainElement = window.mainElement.pin;
 
-let mapPinMainElement = document.querySelector(`.map__pin--main`);
-let mapFiltersContainer = mapElement.querySelector(`.map__filters-container`);
-let mapFiltersElements = document.querySelectorAll(`.map__filter`);
-
-let adFormElement = document.querySelector(`.ad-form`);
-let adFormFieldsetElements = adFormElement.querySelectorAll(`fieldset`);
-let pinAddressInputElement = adFormElement.querySelector(`#address`);
+const mapFiltersElement = window.filter.element.form;
+const adFormElement = window.form.element.ad;
 
 let offers = [];
 
-const getMapElement = () => mapElement;
-const getMapPinMainElement = () => mapPinMainElement;
-const getMapFiltersContainer = () => mapFiltersContainer;
-const getAdFormElement = () => adFormElement;
-const getPinAddressInputElement = () => pinAddressInputElement;
+/* поиск адреса главного пина */
 
-/* функция отрисовки пинов */
+window.form.setAddressCoords(COORDS_X, COORDS_Y);
 
-let createPins = function (bookings) {
-  let fragment = document.createDocumentFragment();
-  let mapPinsElement = window.pin.mapPinsElement;
+/* блокировка формы */
 
-  bookings.forEach(function (booking) {
-    fragment.appendChild(window.pin.getPin(booking));
-  });
+window.form.setDisabled();
 
-  mapPinsElement.appendChild(fragment);
-};
-
-/* блокировка форм */
-
-let setFormDisabled = function (items) {
-  for (let i = 0; i < items.length; i++) {
-    items[i].disabled = true;
-  }
-};
-
-setFormDisabled(adFormFieldsetElements);
-setFormDisabled(mapFiltersElements);
-
-/* активация страницы + вызов отрисовки пинов и карточек */
-
-let setFormActive = function (items) {
-  for (let i = 0; i < items.length; i++) {
-    items[i].disabled = false;
-  }
-};
-
-let setAddressCoords = function (coordsX, coordsY) {
-  pinAddressInputElement.value = coordsX + `,` + coordsY;
-};
-
-setAddressCoords(COORDS_X, COORDS_Y);
+/* активация страницы */
 
 let onSuccess = function (data) {
   offers = data.slice().filter(function (item) {
     return Object.keys(item.offer).length !== 0;
   });
 
-  createPins(offers.slice(0, MAX_COUNT));
+  window.pin.render(offers.slice(0, MAX_COUNT));
+
+  window.form.setActive();
+
+  mapElement.classList.remove(`map--faded`);
+  adFormElement.classList.remove(`ad-form--disabled`);
 
   mapPinMainElement.removeEventListener(`mousedown`, onMainPinMouseDown);
   mapPinMainElement.removeEventListener(`keydown`, onMainPinKeyDown);
@@ -76,11 +43,7 @@ let onError = function (message) {
   window.message.onErrorSend(message);
 };
 
-let getActivePage = function () {
-  setFormActive(adFormFieldsetElements);
-  setFormActive(mapFiltersElements);
-  mapElement.classList.remove(`map--faded`);
-  adFormElement.classList.remove(`ad-form--disabled`);
+let activatePage = function () {
   window.backend.load(onSuccess, onError);
 };
 
@@ -88,13 +51,13 @@ let getActivePage = function () {
 
 let onMainPinMouseDown = function (evt) {
   if (evt.button === window.util.key.LEFT_MOUSE) {
-    getActivePage();
+    activatePage();
   }
 };
 
 let onMainPinKeyDown = function (evt) {
-  window.util.isEnterEvent(evt, function () {
-    getActivePage();
+  window.util.onEnterEvent(evt, function () {
+    activatePage();
   });
 };
 
@@ -108,37 +71,32 @@ let setMainPinStartCoords = function () {
   mapPinMainElement.style.top = COORDS_Y + `px`;
 };
 
-let getDeactivePage = function () {
+let deactivatePage = function () {
   mapElement.classList.add(`map--faded`);
+
+  mapFiltersElement.reset();
 
   adFormElement.reset();
   adFormElement.classList.add(`ad-form--disabled`);
 
-  setFormDisabled(adFormFieldsetElements);
-  setFormDisabled(mapFiltersElements);
+  window.form.onTypeSelectChange();
+  window.form.setDisabled();
 
-  setAddressCoords(COORDS_X, COORDS_Y);
+  window.form.setAddressCoords(COORDS_X, COORDS_Y);
   setMainPinStartCoords();
 
-  window.card.removePopup();
-  window.pin.removePins();
-  window.preview.resetPreview();
+  window.card.remove();
+  window.pin.remove();
+  window.preview.reset();
 
-  mapPinMainElement.addEventListener(`mousedown`, getActivePage);
-  mapPinMainElement.addEventListener(`keydown`, getActivePage);
+  mapPinMainElement.addEventListener(`mousedown`, onMainPinMouseDown);
+  mapPinMainElement.addEventListener(`keydown`, onMainPinKeyDown);
 };
 
 window.main = {
-  mapElement: getMapElement(),
-  mapPinMainElement: getMapPinMainElement(),
-  mapFiltersContainer: getMapFiltersContainer(),
-  adFormElement: getAdFormElement(),
-  pinAddressInputElement: getPinAddressInputElement(),
-
-  offers: function () {
+  offers() {
     return offers;
   },
 
-  getDeactivePage: getDeactivePage,
-  createPins: createPins
+  deactivatePage
 };

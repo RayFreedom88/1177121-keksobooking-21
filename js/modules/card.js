@@ -1,25 +1,26 @@
 'use strict';
 
-let isEscEvent = window.util.isEscEvent;
+let onEscEvent = window.util.onEscEvent;
 
 let types = window.constants.TYPES;
 
-let mapElement = window.main.mapElement;
+let mapElement = window.mainElement.map;
+
+let cardTemplate = document.querySelector(`#card`).content;
 
 let onEscKeyDown = function (evt) {
   let popup = mapElement.querySelector(`.popup`);
 
-  isEscEvent(evt, function () {
+  onEscEvent(evt, function () {
     if (popup !== null) {
-      removePopup();
+      remove();
       document.removeEventListener(`keydown`, onEscKeyDown);
-      window.pin.removeActivePin();
+      window.pin.removeActive();
     }
   });
 };
 
-let getCard = function (booking) {
-  let cardTemplate = document.querySelector(`#card`).content;
+let create = function (booking) {
   let cardElement = cardTemplate.querySelector(`.map__card`).cloneNode(true);
 
   cardElement.querySelector(`.popup__avatar`).src = booking.author.avatar;
@@ -33,15 +34,20 @@ let getCard = function (booking) {
 
   cardElement.querySelector(`.popup__type`).textContent = types[booking.offer.type].ru;
 
-  cardElement.querySelector(`.popup__text--capacity`).textContent = `${booking.offer.rooms} ${booking.offer.rooms === 1 ? `комната` : `комнаты`} для ${booking.offer.guests} ${booking.offer.guests === 1 ? `гостя` : `гостей`}`;
+  cardElement.querySelector(`.popup__text--capacity`).textContent = `${booking.offer.rooms} ${booking.offer.rooms === window.constants.GUESTS_COUNT ? `комната` : `комнаты`} для ${booking.offer.guests} ${booking.offer.guests === window.constants.GUESTS_COUNT ? `гостя` : `гостей`}`;
 
   cardElement.querySelector(`.popup__text--time`).textContent = `Заезд после ${booking.offer.checkin}, выезд до ${booking.offer.checkout}`;
 
-  let featureItems = cardElement.querySelectorAll(`.popup__feature`);
+  let featuresElement = cardElement.querySelector(`.popup__features`);
+  let featureElements = cardElement.querySelectorAll(`.popup__feature`);
 
-  for (let feature of featureItems) {
+  for (let feature of featureElements) {
     if (booking.offer.features.indexOf(feature.classList[1].replace(`popup__feature--`, ``)) < 0) {
       feature.remove();
+    }
+
+    if (booking.offer.features.length === 0) {
+      featuresElement.remove();
     }
   }
 
@@ -66,15 +72,15 @@ let getCard = function (booking) {
   document.addEventListener(`keydown`, onEscKeyDown);
 
   popupClose.addEventListener(`click`, function () {
-    removePopup();
-    window.pin.removeActivePin();
+    remove();
+    window.pin.removeActive();
     document.removeEventListener(`keydown`, onEscKeyDown);
   });
 
   return cardElement;
 };
 
-let removePopup = function () {
+let remove = function () {
   let popup = mapElement.querySelector(`.popup`);
 
   if (popup !== null) {
@@ -83,7 +89,7 @@ let removePopup = function () {
 };
 
 window.card = {
-  getCard: getCard,
-  removePopup: removePopup
+  create,
+  remove
 };
 

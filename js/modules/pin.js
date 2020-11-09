@@ -3,15 +3,15 @@
 const MIN_WIDTH_PINS = window.constants.MIN_WIDTH_PINS;
 const MIN_HEIGHT_PINS = window.constants.MIN_HEIGHT_PINS;
 
-let mapElement = window.main.mapElement;
-
+let mapElement = window.mainElement.map;
 let mapPinsElement = mapElement.querySelector(`.map__pins`);
-let mapFiltersContainer = window.main.mapFiltersContainer;
+let mapFiltersContainer = window.filter.element.container;
 
-const getMapPinsElement = () => mapPinsElement;
+let pinTemplate = document.querySelector(`#pin`).content;
 
-let getPin = function (booking) {
-  let pinTemplate = document.querySelector(`#pin`).content;
+// функция создания пинов
+
+let create = function (booking) {
   let pinElement = pinTemplate.querySelector(`.map__pin`).cloneNode(true);
 
   pinElement.querySelector(`img`).src = booking.author.avatar;
@@ -26,17 +26,31 @@ let getPin = function (booking) {
   mapPinsElement.appendChild(pinElement);
 
   pinElement.addEventListener(`click`, function () {
-    removeActivePin();
+    removeActive();
     pinElement.classList.add(`map__pin--active`);
-    window.card.removePopup();
+    window.card.remove();
 
-    mapElement.insertBefore(window.card.getCard(booking), mapFiltersContainer);
+    mapElement.insertBefore(window.card.create(booking), mapFiltersContainer);
   });
 
   return pinElement;
 };
 
-let removePins = function () {
+// функция отрисовки пинов
+
+let render = function (bookings) {
+  let fragment = document.createDocumentFragment();
+
+  bookings.forEach(function (booking) {
+    fragment.appendChild(create(booking));
+  });
+
+  mapPinsElement.appendChild(fragment);
+};
+
+// функции удаления пинов
+
+let remove = function () {
   let pinsOnMap = mapElement.querySelectorAll(`.map__pin:not(.map__pin--main)`);
 
   if (pinsOnMap.length > 0) {
@@ -46,7 +60,7 @@ let removePins = function () {
   }
 };
 
-let removeActivePin = function () {
+let removeActive = function () {
   let activePin = mapElement.querySelector(`.map__pin--active`);
 
   if (activePin !== null) {
@@ -55,8 +69,8 @@ let removeActivePin = function () {
 };
 
 window.pin = {
-  mapPinsElement: getMapPinsElement(),
-  getPin: getPin,
-  removePins: removePins,
-  removeActivePin: removeActivePin
+  create,
+  render,
+  remove,
+  removeActive
 };

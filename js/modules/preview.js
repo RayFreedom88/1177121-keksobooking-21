@@ -8,15 +8,15 @@ let Photo = {
   ALT: `Фотография жилья`
 };
 
-let form = window.main.adFormElement;
+let adFormElement = window.form.element.ad;
 
-let fileChooserAvatar = form.querySelector(`.ad-form-header__upload input[type=file]`);
-let previewAvatar = form.querySelector(`.ad-form-header__upload img`);
+let fileChooserAvatar = adFormElement.querySelector(`.ad-form-header__upload input[type=file]`);
+let previewAvatar = adFormElement.querySelector(`.ad-form-header__upload img`);
 let defaultAvatar = previewAvatar.src;
 
-let photoContainer = form.querySelector(`.ad-form__photo-container`);
-let fileChooserPhotos = form.querySelector(`.ad-form__upload input[type=file]`);
-let previewPhoto = form.querySelector(`.ad-form__photo`);
+let photoContainer = adFormElement.querySelector(`.ad-form__photo-container`);
+let fileChooserPhotos = adFormElement.querySelector(`.ad-form__upload input[type=file]`);
+let previewPhoto = adFormElement.querySelector(`.ad-form__photo`);
 
 let previews = [];
 
@@ -64,7 +64,7 @@ let createPhotoElement = function (src) {
   photoContainer.insertBefore(element, previewPhoto);
 };
 
-let resetPreview = function () {
+let reset = function () {
   if (previews) {
     previews.forEach(function (element) {
       element.remove();
@@ -76,5 +76,5 @@ let resetPreview = function () {
 };
 
 window.preview = {
-  resetPreview: resetPreview
+  reset
 };

@@ -1,6 +1,6 @@
 'use strict';
 
-let mapPinMainElement = window.main.mapPinMainElement;
+let mapPinMainElement = window.mainElement.pin;
 
 let MAIN_PIN_WIDTH = mapPinMainElement.clientWidth;
 let MAIN_PIN_HEIGHT = mapPinMainElement.clientHeight;
@@ -30,7 +30,7 @@ let setMainPinMove = function (shift) {
   mapPinMainElement.style.top = y + `px`;
   mapPinMainElement.style.left = x + `px`;
 
-  window.main.pinAddressInputElement.value = Math.round(parseInt(mapPinMainElement.style.left, 10) + MAIN_PIN_WIDTH / 2) + `, ` + Math.round(parseInt(mapPinMainElement.style.top, 10) + MAIN_PIN_HEIGHT / 2);
+  window.form.element.pinAddressInput.value = Math.round(parseInt(mapPinMainElement.style.left, 10) + MAIN_PIN_WIDTH / 2) + `, ` + Math.round(parseInt(mapPinMainElement.style.top, 10) + MAIN_PIN_HEIGHT / 2);
 };
 
 let onMainPinGrab = function (evt) {
