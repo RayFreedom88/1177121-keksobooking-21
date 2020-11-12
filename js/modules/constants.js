@@ -1,6 +1,6 @@
 'use strict';
 
-let constants = {
+const constants = {
   COORDS_X: 570,
   COORDS_Y: 375,
 

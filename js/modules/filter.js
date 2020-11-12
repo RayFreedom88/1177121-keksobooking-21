@@ -6,7 +6,7 @@ const mapElement = window.mainElement.map;
 const mapFiltersContainer = mapElement.querySelector(`.map__filters-container`);
 const mapFiltersElement = mapFiltersContainer.querySelector(`form`);
 
-let priceMap = {
+const priceMap = {
   'low': {
     start: 0,
     end: 10000
@@ -21,9 +21,9 @@ let priceMap = {
   }
 };
 
-let filterElements = Array.from(mapFiltersElement.children);
+const filterElements = Array.from(mapFiltersElement.children);
 
-let filterValidation = {
+const filterValidation = {
   'housing-type': function (data, filter) {
     return filter.value === data.offer.type;
   },
@@ -52,7 +52,7 @@ let filterValidation = {
 };
 
 
-let filterData = function (data) {
+const filterData = function (data) {
   return data.filter(function (item) {
     return filterElements.every(function (filter) {
       return (filter.value === DEFAULT_FILTER_VALUE) ? true : filterValidation[filter.id](item, filter);
@@ -60,7 +60,7 @@ let filterData = function (data) {
   });
 };
 
-let onFilterFormChange = window.debounce(function () {
+const onFilterFormChange = window.debounce(function () {
   window.card.remove();
   window.pin.remove();
   window.pin.render(filterData(window.main.offers()).slice(0, window.constants.MAX_COUNT));

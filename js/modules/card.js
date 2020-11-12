@@ -1,17 +1,17 @@
 'use strict';
 
-let onEscEvent = window.util.onEscEvent;
+const onEscEvent = window.util.onEscEvent;
 
-let types = window.constants.TYPES;
+const types = window.constants.TYPES;
 
-let mapElement = window.mainElement.map;
+const mapElement = window.mainElement.map;
 
-let cardTemplate = document.querySelector(`#card`).content;
+const cardTemplate = document.querySelector(`#card`).content;
 
-let onEscKeyDown = function (evt) {
-  let popup = mapElement.querySelector(`.popup`);
+const onEscKeyDown = function (evt) {
+  const popup = mapElement.querySelector(`.popup`);
 
-  onEscEvent(evt, function () {
+  onEscEvent(evt, () => {
     if (popup !== null) {
       remove();
       document.removeEventListener(`keydown`, onEscKeyDown);
@@ -20,8 +20,8 @@ let onEscKeyDown = function (evt) {
   });
 };
 
-let create = function (booking) {
-  let cardElement = cardTemplate.querySelector(`.map__card`).cloneNode(true);
+const create = function (booking) {
+  const cardElement = cardTemplate.querySelector(`.map__card`).cloneNode(true);
 
   cardElement.querySelector(`.popup__avatar`).src = booking.author.avatar;
   cardElement.querySelector(`.popup__avatar`).alt = booking.offer.description;
@@ -38,8 +38,8 @@ let create = function (booking) {
 
   cardElement.querySelector(`.popup__text--time`).textContent = `Заезд после ${booking.offer.checkin}, выезд до ${booking.offer.checkout}`;
 
-  let featuresElement = cardElement.querySelector(`.popup__features`);
-  let featureElements = cardElement.querySelectorAll(`.popup__feature`);
+  const featuresElement = cardElement.querySelector(`.popup__features`);
+  const featureElements = cardElement.querySelectorAll(`.popup__feature`);
 
   for (let feature of featureElements) {
     if (booking.offer.features.indexOf(feature.classList[1].replace(`popup__feature--`, ``)) < 0) {
@@ -53,13 +53,13 @@ let create = function (booking) {
 
   cardElement.querySelector(`.popup__description`).textContent = booking.offer.description;
 
-  let cardPhotos = cardElement.querySelector(`.popup__photos`);
-  let cardPhotoImage = cardPhotos.querySelector(`.popup__photo`);
+  const cardPhotos = cardElement.querySelector(`.popup__photos`);
+  const cardPhotoImage = cardPhotos.querySelector(`.popup__photo`);
 
   if (booking.offer.photos.length > 0) {
     cardPhotoImage.remove();
     for (let photo of booking.offer.photos) {
-      let clonePhoto = document.querySelector(`#card`).content.querySelector(`.popup__photo`).cloneNode(true);
+      const clonePhoto = document.querySelector(`#card`).content.querySelector(`.popup__photo`).cloneNode(true);
       clonePhoto.src = photo;
       cardPhotos.appendChild(clonePhoto);
     }
@@ -67,11 +67,11 @@ let create = function (booking) {
     cardPhotos.remove();
   }
 
-  let popupClose = cardElement.querySelector(`.popup__close`);
+  const popupClose = cardElement.querySelector(`.popup__close`);
 
   document.addEventListener(`keydown`, onEscKeyDown);
 
-  popupClose.addEventListener(`click`, function () {
+  popupClose.addEventListener(`click`, () => {
     remove();
     window.pin.removeActive();
     document.removeEventListener(`keydown`, onEscKeyDown);
@@ -80,7 +80,7 @@ let create = function (booking) {
   return cardElement;
 };
 
-let remove = function () {
+const remove = function () {
   let popup = mapElement.querySelector(`.popup`);
 
   if (popup !== null) {

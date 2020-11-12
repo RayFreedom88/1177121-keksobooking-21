@@ -1,16 +1,16 @@
 'use strict';
 
-let URL_LOAD = `https://21.javascript.pages.academy/keksobooking/data`;
-let URL_UPLOAD = `https://21.javascript.pages.academy/keksobooking`;
-let OK_CODE = 200;
-let TIMEOUT = 10000;
+const URL_LOAD = `https://21.javascript.pages.academy/keksobooking/data`;
+const URL_UPLOAD = `https://21.javascript.pages.academy/keksobooking`;
+const OK_CODE = 200;
+const TIMEOUT = 10000;
 
-let request = function (onSuccess, onError, data) {
+const request = function (onSuccess, onError, data) {
   let xhr = new XMLHttpRequest();
   xhr.responseType = `json`;
   xhr.timeout = TIMEOUT;
 
-  xhr.addEventListener(`load`, function () {
+  xhr.addEventListener(`load`, () => {
     if (xhr.status === OK_CODE) {
       onSuccess(xhr.response);
     } else {
@@ -22,7 +22,7 @@ let request = function (onSuccess, onError, data) {
     onError(`Произошла ошибка соединения`);
   });
 
-  xhr.addEventListener(`timeout`, function () {
+  xhr.addEventListener(`timeout`, () => {
     onError(`Запрос не успел выполниться за ` + xhr.timeout + `мс`);
   });
 

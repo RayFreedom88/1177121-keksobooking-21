@@ -23,7 +23,7 @@ window.form.setDisabled();
 
 /* активация страницы */
 
-let onSuccess = function (data) {
+const onSuccess = function (data) {
   offers = data.slice().filter(function (item) {
     return Object.keys(item.offer).length !== 0;
   });
@@ -39,23 +39,23 @@ let onSuccess = function (data) {
   mapPinMainElement.removeEventListener(`keydown`, onMainPinKeyDown);
 };
 
-let onError = function (message) {
+const onError = function (message) {
   window.message.onErrorSend(message);
 };
 
-let activatePage = function () {
+const activatePage = function () {
   window.backend.load(onSuccess, onError);
 };
 
 // активации страницы
 
-let onMainPinMouseDown = function (evt) {
+const onMainPinMouseDown = function (evt) {
   if (evt.button === window.util.key.LEFT_MOUSE) {
     activatePage();
   }
 };
 
-let onMainPinKeyDown = function (evt) {
+const onMainPinKeyDown = function (evt) {
   window.util.onEnterEvent(evt, function () {
     activatePage();
   });
@@ -66,12 +66,12 @@ mapPinMainElement.addEventListener(`keydown`, onMainPinKeyDown);
 
 // деактивация страницы
 
-let setMainPinStartCoords = function () {
+const setMainPinStartCoords = function () {
   mapPinMainElement.style.left = COORDS_X + `px`;
   mapPinMainElement.style.top = COORDS_Y + `px`;
 };
 
-let deactivatePage = function () {
+const deactivatePage = function () {
   mapElement.classList.add(`map--faded`);
 
   mapFiltersElement.reset();

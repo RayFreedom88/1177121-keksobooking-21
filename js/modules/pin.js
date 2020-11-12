@@ -3,16 +3,16 @@
 const MIN_WIDTH_PINS = window.constants.MIN_WIDTH_PINS;
 const MIN_HEIGHT_PINS = window.constants.MIN_HEIGHT_PINS;
 
-let mapElement = window.mainElement.map;
-let mapPinsElement = mapElement.querySelector(`.map__pins`);
-let mapFiltersContainer = window.filter.element.container;
+const mapElement = window.mainElement.map;
+const mapPinsElement = mapElement.querySelector(`.map__pins`);
+const mapFiltersContainer = window.filter.element.container;
 
-let pinTemplate = document.querySelector(`#pin`).content;
+const pinTemplate = document.querySelector(`#pin`).content;
 
 // функция создания пинов
 
-let create = function (booking) {
-  let pinElement = pinTemplate.querySelector(`.map__pin`).cloneNode(true);
+const create = function (booking) {
+  const pinElement = pinTemplate.querySelector(`.map__pin`).cloneNode(true);
 
   pinElement.querySelector(`img`).src = booking.author.avatar;
   pinElement.querySelector(`img`).alt = booking.offer.description;
@@ -25,7 +25,7 @@ let create = function (booking) {
 
   mapPinsElement.appendChild(pinElement);
 
-  pinElement.addEventListener(`click`, function () {
+  pinElement.addEventListener(`click`, () => {
     removeActive();
     pinElement.classList.add(`map__pin--active`);
     window.card.remove();
@@ -38,8 +38,8 @@ let create = function (booking) {
 
 // функция отрисовки пинов
 
-let render = function (bookings) {
-  let fragment = document.createDocumentFragment();
+const render = function (bookings) {
+  const fragment = document.createDocumentFragment();
 
   bookings.forEach(function (booking) {
     fragment.appendChild(create(booking));
@@ -50,8 +50,8 @@ let render = function (bookings) {
 
 // функции удаления пинов
 
-let remove = function () {
-  let pinsOnMap = mapElement.querySelectorAll(`.map__pin:not(.map__pin--main)`);
+const remove = function () {
+  const pinsOnMap = mapElement.querySelectorAll(`.map__pin:not(.map__pin--main)`);
 
   if (pinsOnMap.length > 0) {
     pinsOnMap.forEach(function (pin) {
@@ -60,8 +60,8 @@ let remove = function () {
   }
 };
 
-let removeActive = function () {
-  let activePin = mapElement.querySelector(`.map__pin--active`);
+const removeActive = function () {
+  const activePin = mapElement.querySelector(`.map__pin--active`);
 
   if (activePin !== null) {
     activePin.classList.remove(`map__pin--active`);

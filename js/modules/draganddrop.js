@@ -1,17 +1,17 @@
 'use strict';
 
-let mapPinMainElement = window.mainElement.pin;
+const mapPinMainElement = window.mainElement.pin;
 
-let MAIN_PIN_WIDTH = mapPinMainElement.clientWidth;
-let MAIN_PIN_HEIGHT = mapPinMainElement.clientHeight;
+const MAIN_PIN_WIDTH = mapPinMainElement.clientWidth;
+const MAIN_PIN_HEIGHT = mapPinMainElement.clientHeight;
 
-let MIN_LOCATION_X = window.constants.MIN_LOCATION_X;
-let MIN_LOCATION_Y = window.constants.MIN_LOCATION_Y;
+const MIN_LOCATION_X = window.constants.MIN_LOCATION_X;
+const MIN_LOCATION_Y = window.constants.MIN_LOCATION_Y;
 
-let MAX_LOCATION_Y = window.constants.MAX_LOCATION_Y;
-let MAX_LOCATION_X = window.constants.MAX_LOCATION_X;
+const MAX_LOCATION_Y = window.constants.MAX_LOCATION_Y;
+const MAX_LOCATION_X = window.constants.MAX_LOCATION_X;
 
-let setMainPinMove = function (shift) {
+const setMainPinMove = function (shift) {
   let y = mapPinMainElement.offsetTop - shift.y;
   let x = mapPinMainElement.offsetLeft - shift.x;
 
@@ -33,7 +33,7 @@ let setMainPinMove = function (shift) {
   window.form.element.pinAddressInput.value = Math.round(parseInt(mapPinMainElement.style.left, 10) + MAIN_PIN_WIDTH / 2) + `, ` + Math.round(parseInt(mapPinMainElement.style.top, 10) + MAIN_PIN_HEIGHT / 2);
 };
 
-let onMainPinGrab = function (evt) {
+const onMainPinGrab = function (evt) {
   if (evt.button === window.util.key.LEFT_MOUSE) {
     evt.preventDefault();
 
@@ -42,7 +42,7 @@ let onMainPinGrab = function (evt) {
       y: evt.clientY
     };
 
-    let onMouseMove = function (moveEvt) {
+    const onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
 
       let shift = {
@@ -58,7 +58,7 @@ let onMainPinGrab = function (evt) {
       setMainPinMove(shift);
     };
 
-    let onMouseUp = function (upEvt) {
+    const onMouseUp = function (upEvt) {
       upEvt.preventDefault();
       document.removeEventListener(`mousemove`, onMouseMove);
       document.removeEventListener(`mouseup`, onMouseUp);
