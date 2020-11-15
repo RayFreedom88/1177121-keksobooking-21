@@ -11,7 +11,7 @@ const cardTemplate = document.querySelector(`#card`).content;
 const onEscKeyDown = function (evt) {
   const popup = mapElement.querySelector(`.popup`);
 
-  onEscEvent(evt, () => {
+  onEscEvent(evt, function () {
     if (popup !== null) {
       remove();
       document.removeEventListener(`keydown`, onEscKeyDown);
@@ -71,7 +71,7 @@ const create = function (booking) {
 
   document.addEventListener(`keydown`, onEscKeyDown);
 
-  popupClose.addEventListener(`click`, () => {
+  popupClose.addEventListener(`click`, function () {
     remove();
     window.pin.removeActive();
     document.removeEventListener(`keydown`, onEscKeyDown);

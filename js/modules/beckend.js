@@ -10,7 +10,7 @@ const request = function (onSuccess, onError, data) {
   xhr.responseType = `json`;
   xhr.timeout = TIMEOUT;
 
-  xhr.addEventListener(`load`, () => {
+  xhr.addEventListener(`load`, function () {
     if (xhr.status === OK_CODE) {
       onSuccess(xhr.response);
     } else {
@@ -22,7 +22,7 @@ const request = function (onSuccess, onError, data) {
     onError(`Произошла ошибка соединения`);
   });
 
-  xhr.addEventListener(`timeout`, () => {
+  xhr.addEventListener(`timeout`, function () {
     onError(`Запрос не успел выполниться за ` + xhr.timeout + `мс`);
   });
 

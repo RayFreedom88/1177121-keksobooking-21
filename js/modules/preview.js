@@ -31,7 +31,7 @@ const showPreview = function (element, preview) {
   if (matches) {
     let reader = new FileReader();
 
-    reader.addEventListener(`load`, () => {
+    reader.addEventListener(`load`, function () {
       preview(reader.result);
     });
 
@@ -39,13 +39,13 @@ const showPreview = function (element, preview) {
   }
 };
 
-fileChooserAvatar.addEventListener(`change`, () => {
+fileChooserAvatar.addEventListener(`change`, function () {
   showPreview(fileChooserAvatar, function (image) {
     previewAvatar.src = image;
   });
 });
 
-fileChooserPhotos.addEventListener(`change`, () => {
+fileChooserPhotos.addEventListener(`change`, function () {
   showPreview(fileChooserPhotos, createPhotoElement);
 });
 

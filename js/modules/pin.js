@@ -25,7 +25,7 @@ const create = function (booking) {
 
   mapPinsElement.appendChild(pinElement);
 
-  pinElement.addEventListener(`click`, () => {
+  pinElement.addEventListener(`click`, function () {
     removeActive();
     pinElement.classList.add(`map__pin--active`);
     window.card.remove();
