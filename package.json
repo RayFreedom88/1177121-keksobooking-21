@@ -21,7 +21,7 @@
   "scripts": {
     "test": "eslint js/",
     "build.dev": "webpack --mode development",
-    "build.pro": "webpack --mode production",
+    "build.pro": "webpack --mode production"
   },
   "engines": {
     "node": "8.11"
