@@ -1,7 +1,7 @@
 'use strict';
 
-const URL_LOAD = `https://21.javascript.pages.academy/keksobooking/data`;
-const URL_UPLOAD = `https://21.javascript.pages.academy/keksobooking`;
+const URL_LOAD = `https://25.javascript.pages.academy/keksobooking/data`;
+const URL_UPLOAD = `https://25.javascript.pages.academy/keksobooking`;
 const OK_CODE = 200;
 const TIMEOUT = 10000;
 
